@@ -1,4 +1,4 @@
-﻿namespace Hexagonal.Domain.Generic;
+﻿namespace LaPinguinera.Domain.Generic;
 
 public abstract class Command<T>( T aggregateId ) where T : Identity
 {

@@ -1,4 +1,4 @@
-﻿namespace Hexagonal.Domain.Generic;
+﻿namespace LaPinguinera.Domain.Generic;
 
 public abstract class Identity : IValueObject<string>
 {
@@ -9,8 +9,13 @@ public abstract class Identity : IValueObject<string>
 		Value = Guid.NewGuid().ToString();
 	}
 
-	public Identity( string uuid )
+	public Identity( string? uuid )
 	{
+		if (string.IsNullOrWhiteSpace( uuid ))
+		{
+			throw new ArgumentException( "UUID cannot be null or empty" );
+		}
+
 		Value = uuid;
 	}
 

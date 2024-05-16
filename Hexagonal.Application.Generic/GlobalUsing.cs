@@ -1,1 +1,1 @@
-﻿global using Hexagonal.Domain.Generic;
+﻿global using LaPinguinera.Domain.Generic;

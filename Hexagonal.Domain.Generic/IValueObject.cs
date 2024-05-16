@@ -1,4 +1,4 @@
-﻿namespace Hexagonal.Domain.Generic;
+﻿namespace LaPinguinera.Domain.Generic;
 
 public interface IValueObject<T>
 {

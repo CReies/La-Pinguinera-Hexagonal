@@ -1,4 +1,4 @@
-using Hexagonal.Application;
+using LaPinguinera.Application;
 
 var builder = WebApplication.CreateBuilder( args );
 

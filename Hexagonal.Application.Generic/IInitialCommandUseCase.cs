@@ -1,4 +1,4 @@
-﻿namespace Hexagonal.Application.Generic;
+﻿namespace LaPinguinera.Application.Generic;
 
 public interface IInitialCommandUseCase<T> where T : InitialCommand
 {

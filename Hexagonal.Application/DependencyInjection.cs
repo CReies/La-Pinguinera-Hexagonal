@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Hexagonal.Application;
+namespace LaPinguinera.Application;
 
 public static class DependencyInjection
 {

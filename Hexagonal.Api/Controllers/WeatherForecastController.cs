@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Hexagonal.Api.Controllers
+namespace LaPinguinera.Api.Controllers
 {
 	[ApiController]
 	[Route( "[controller]" )]

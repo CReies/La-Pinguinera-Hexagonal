@@ -1,4 +1,4 @@
-﻿namespace Hexagonal.Domain.Generic;
+﻿namespace LaPinguinera.Domain.Generic;
 
 public class AggregateRoot<I>( I identity ) : Entity<I>( identity ) where I : Identity
 {

@@ -1,4 +1,4 @@
-﻿namespace Hexagonal.Domain.Generic;
+﻿namespace LaPinguinera.Domain.Generic;
 
 public abstract class Entity<I>( I identity ) where I : Identity
 {

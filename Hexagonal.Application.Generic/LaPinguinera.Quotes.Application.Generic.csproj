@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hexagonal.Domain.Generic\Hexagonal.Domain.Generic.csproj" />
+    <ProjectReference Include="..\Hexagonal.Domain.Generic\LaPinguinera.Quotes.Domain.Generic.csproj" />
   </ItemGroup>
 
 </Project>

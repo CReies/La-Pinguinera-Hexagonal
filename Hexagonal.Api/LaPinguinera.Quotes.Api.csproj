@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hexagonal.Application\Hexagonal.Application.csproj" />
+    <ProjectReference Include="..\Hexagonal.Application\LaPinguinera.Quotes.Application.csproj" />
   </ItemGroup>
 
 </Project>

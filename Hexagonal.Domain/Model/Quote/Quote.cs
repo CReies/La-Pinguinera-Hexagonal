@@ -9,7 +9,7 @@ namespace LaPinguinera.Quotes.Domain.Model.Quote;
 public class Quote : AggregateRoot<QuoteId>
 {
 	public List<AbstractBook> Inventory { get; set; } = [];
-	public (List<(List<AbstractBook> QuoteGroup, TotalPrice TotalPrice, Discount Discount)> Quote, TotalPrice TotalPrice, Discount Discount) Result { get; set; }
+	public (List<(List<AbstractBook> QuoteGroup, TotalPrice? TotalPrice, Discount? Discount)> Quote, TotalPrice? TotalPrice, Discount? Discount) Result { get; set; }
 	public RestBudget? RestBudget { get; set; }
 
 	public Quote( QuoteId id ) : base( id )

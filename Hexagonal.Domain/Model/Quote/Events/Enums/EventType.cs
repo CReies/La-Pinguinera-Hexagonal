@@ -5,5 +5,6 @@ public enum EventType
 	IndividualPriceCalculated,
 	ListPriceCalculated,
 	QuoteCreated,
-	BudgetCalculated
+	BudgetCalculated,
+	GroupPriceCalculated,
 }

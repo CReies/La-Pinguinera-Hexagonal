@@ -39,4 +39,9 @@ public class Quote : AggregateRoot<QuoteId>
 	{
 		AppendEvent( new BudgetCalculated( bookIds, budget, customerRegisterDate ) ).Invoke();
 	}
+
+	public void CalculateGroup( List<List<(string bookId, int quantity)>> groupsRequested, DateOnly customerRegisterDate )
+	{
+		AppendEvent( new GroupPriceCalculated( groupsRequested, customerRegisterDate ) ).Invoke();
+	}
 }

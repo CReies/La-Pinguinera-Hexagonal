@@ -2,6 +2,7 @@
 using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Factory;
+using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote;
 
@@ -19,6 +20,9 @@ public class QuoteBehavior : Behavior
 			BookFactory _bookFactory = new();
 			var book = _bookFactory.Create( domainEvent.Title, domainEvent.Author, domainEvent.BasePrice, domainEvent.BookType );
 			book.CalculateSellPrice();
+
+			quote.Result.Quote.Add( ([book], null, null) );
+
 			quote.Inventory.Add( book );
 		} );
 	}

@@ -2,8 +2,8 @@
 
 public enum EventType
 {
-	INDIVIDUAL_PRICE_CALCULATED,
-	LIST_PRICE_CALCULATED,
-	QUOTE_CREATED,
-	BUDGET_CALCULATED
+	IndividualPriceCalculated,
+	ListPriceCalculated,
+	QuoteCreated,
+	BudgetCalculated
 }

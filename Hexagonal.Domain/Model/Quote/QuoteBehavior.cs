@@ -19,6 +19,7 @@ public class QuoteBehavior : Behavior
 		AddCalculateIndividualSub( quote );
 		AddCalculateListSub( quote );
 		AddCalculateBudgetSub( quote );
+		AddCalculateGroupSub( quote );
 	}
 
 	private void AddQuoteCreatedSub( Quote quote )
@@ -70,20 +71,22 @@ public class QuoteBehavior : Behavior
 
 	private static void CalculatePrices( Quote quote )
 	{
-		var books = quote.RequestedBooks[0];
-		var isRetail = books.Count <= 10;
-		var seniority = quote.Customer!.Seniority.Value;
-
-		for (int i = 0; i < books.Count; i++)
+		quote.RequestedBooks.ForEach( books =>
 		{
-			var book = books[i];
+			var isRetail = books.Count <= 10;
+			var seniority = quote.Customer!.Seniority.Value;
 
-			book.ChangeRetailIncrease( isRetail ? 0.02m : 0 );
-			book.ChangeWholeSaleDiscount( i > 9 ? 0.0015m * (i - 9) : 0 );
-			book.ApplyDiscount( seniority );
+			for (int i = 0; i < books.Count; i++)
+			{
+				var book = books[i];
 
-			book.ApplyDiscount( seniority );
-		}
+				book.ChangeRetailIncrease( isRetail ? 0.02m : 0 );
+				book.ChangeWholeSaleDiscount( i > 9 ? 0.0015m * (i - 9) : 0 );
+				book.ApplyDiscount( seniority );
+
+				book.ApplyDiscount( seniority );
+			}
+		} );
 	}
 
 	private void AddCalculateBudgetSub( Quote quote )
@@ -163,5 +166,29 @@ public class QuoteBehavior : Behavior
 		}
 	}
 
+	private void AddCalculateGroupSub( Quote quote )
+	{
+		AddSub( ( GroupPriceCalculated domainEvent ) =>
+		{
+			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 
+			domainEvent.GroupsRequested.ForEach( ( group ) =>
+			{
+				for (int i = 0; i < group.Count; i++)
+				{
+					var (bookId, bookQuantity) = group[i];
+					var book = quote.Inventory.Find( book => book.Id.Value == bookId ) ?? throw new KeyNotFoundException( "Book not found" );
+					for (int j = 0; j < bookQuantity; j++)
+					{
+						quote.RequestedBooks[i].Add( book );
+					}
+				}
+
+				quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
+				quote.Customer.CalculateSeniority();
+
+				CalculatePrices( quote );
+			} );
+		} );
+	}
 }

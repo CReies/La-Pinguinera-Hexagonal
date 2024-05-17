@@ -18,6 +18,7 @@ public class QuoteBehavior : Behavior
 		AddQuoteCreatedSub( quote );
 		AddCalculateIndividualSub( quote );
 		AddCalculateListSub( quote );
+		AddCalculateBudgetSub( quote );
 	}
 
 	private void AddQuoteCreatedSub( Quote quote )
@@ -161,4 +162,6 @@ public class QuoteBehavior : Behavior
 			return 0;
 		}
 	}
+
+
 }

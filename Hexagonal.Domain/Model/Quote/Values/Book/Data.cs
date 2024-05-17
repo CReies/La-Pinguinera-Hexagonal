@@ -3,32 +3,27 @@ using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Values.Book;
 
-public class Data : IValueObject<(string Title, string Author, decimal SellPrice, BookType Type)>
+public class Data : IValueObject<(string Title, string Author, BookType Type)>
 {
-    public (string Title, string Author, decimal SellPrice, BookType Type) Value { get; private set; }
+	public (string Title, string Author, BookType Type) Value { get; private set; }
 
-    private Data((string? Title, string? Author, decimal Price, BookType Type) value)
-    {
-        if (string.IsNullOrWhiteSpace(value.Title))
-        {
-            throw new ArgumentException("Title cannot be null or empty");
-        }
+	private Data( (string? Title, string? Author, BookType Type) value )
+	{
+		if (string.IsNullOrWhiteSpace( value.Title ))
+		{
+			throw new ArgumentException( "Title cannot be null or empty" );
+		}
 
-        if (string.IsNullOrWhiteSpace(value.Author))
-        {
-            throw new ArgumentException("Author cannot be null or empty");
-        }
+		if (string.IsNullOrWhiteSpace( value.Author ))
+		{
+			throw new ArgumentException( "Author cannot be null or empty" );
+		}
 
-        if (value.Price <= 0)
-        {
-            throw new ArgumentException("Price cannot be less than or equal to zero");
-        }
+		Value = value!;
+	}
 
-        Value = value!;
-    }
-
-    public static Data Of(string? Title, string? Author, decimal Price, BookType Type)
-    {
-        return new Data((Title, Author, Price, Type));
-    }
+	public static Data Of( string? Title, string? Author, BookType Type )
+	{
+		return new Data( (Title, Author, Type) );
+	}
 }

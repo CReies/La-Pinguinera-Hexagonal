@@ -2,7 +2,9 @@
 using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Factory;
+using LaPinguinera.Quotes.Domain.Model.Quote.Shared;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book;
+using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
@@ -22,7 +24,7 @@ public class QuoteBehavior : Behavior
 	{
 		AddSub( ( QuoteCreated domainEvent ) =>
 		{
-			quote.Result = ([], null, null);
+			quote.Result = new Result();
 			quote.RequestedBooks = [];
 			quote.Customer = null;
 			quote.Inventory = [];
@@ -37,7 +39,7 @@ public class QuoteBehavior : Behavior
 			var book = BookFactory.Create( domainEvent.Title, domainEvent.Author, domainEvent.BasePrice, domainEvent.BookType );
 			book.CalculateSellPrice();
 
-			quote.Result.Quote.Add( ([book], null, null) );
+			quote.Result.Quotes[0].Books.Add( book );
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			quote.Inventory.Add( book );
 		} );
@@ -80,6 +82,83 @@ public class QuoteBehavior : Behavior
 			book.ApplyDiscount( seniority );
 
 			book.ApplyDiscount( seniority );
+		}
+	}
+
+	private void AddCalculateBudgetSub( Quote quote )
+	{
+		AddSub( ( BudgetCalculated domainEvent ) =>
+		{
+			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
+
+			var cheapBook = quote.Inventory
+				.Where( book => book.Data.Value.Type == BookType.BOOK )
+				.OrderBy( book => book.SellPrice.Value )
+				.First();
+
+			var cheapNovel = quote.Inventory
+				.Where( book => book.Data.Value.Type == BookType.NOVEL )
+				.OrderBy( book => book.SellPrice.Value )
+				.First();
+
+			var expensiveBook = cheapBook.SellPrice.Value > cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
+			var cheapestBook = cheapBook.SellPrice.Value < cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
+
+			SetMaxBooksAndRemainingBudget( quote, cheapBook, expensiveBook, quote.Customer!.Seniority, domainEvent.Budget );
+		} );
+	}
+
+	private void SetMaxBooksAndRemainingBudget( Quote quote, AbstractBook cheapBook, AbstractBook expensiveBook, CustomerSeniority seniority, decimal totalBudget )
+	{
+		var budget = totalBudget - expensiveBook.SellPrice.Value;
+		var restOfBudget = budget;
+
+		int quantity;
+
+		for (quantity = 0; quantity < 600; quantity++)
+		{
+			var bookEntity = GetBookEntity( cheapBook, quantity, seniority );
+
+			if (restOfBudget < bookEntity.FinalPrice!.Value) break;
+
+			restOfBudget -= bookEntity.FinalPrice.Value;
+		}
+
+		if (quantity <= 10) throw new ArgumentException( "You don't have enough budget for a major sale" );
+		quote.Result.Quotes[0].Books.Add( expensiveBook );
+
+		for (int i = 0; i < quantity; i++)
+		{
+			quote.Result.Quotes[0].Books.Add( cheapBook );
+		}
+
+		quote.RestBudget = RestBudget.Of( restOfBudget );
+		quote.Result.Quotes[0].TotalPrice = totalBudget - restOfBudget;
+		var totalDiscount = quote.Result.Quotes[0].Books.Sum( book => book.SellPrice.Value ) - quote.Result.Quotes[0].TotalPrice;
+	}
+
+	private AbstractBook GetBookEntity( AbstractBook book, int quantity, CustomerSeniority seniority )
+	{
+		var WholesaleDiscount = CalculateWholesaleDiscount( quantity );
+		book.ChangeWholeSaleDiscount( WholesaleDiscount );
+		book.ApplyDiscount( seniority.Value );
+		return book;
+	}
+
+	private static decimal CalculateWholesaleDiscount( int quantity )
+	{
+		const int MINIMUM_EXPENSIVE_BOOK = 1;
+		const int WHOLESALEDISCOUNT_FROM = 10;
+		const int DIFFERENCE = WHOLESALEDISCOUNT_FROM - MINIMUM_EXPENSIVE_BOOK;
+		const decimal DISCOUNT_RATE = 0.0015m;
+		if (quantity >= DIFFERENCE)
+		{
+			int additionalQuantity = quantity + 1 - DIFFERENCE;
+			return DISCOUNT_RATE * additionalQuantity;
+		}
+		else
+		{
+			return 0;
 		}
 	}
 }

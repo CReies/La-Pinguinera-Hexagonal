@@ -1,6 +1,7 @@
 ﻿using LaPinguinera.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
+using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 
@@ -9,7 +10,7 @@ namespace LaPinguinera.Quotes.Domain.Model.Quote;
 public class Quote : AggregateRoot<QuoteId>
 {
 	public List<AbstractBook> Inventory { get; set; }
-	public (List<(List<AbstractBook> QuoteGroup, TotalPrice? TotalPrice, Discount? Discount)> Quote, TotalPrice? TotalPrice, Discount? Discount) Result { get; set; }
+	public IResult Result { get; set; }
 	public List<List<AbstractBook>> RequestedBooks { get; set; }
 	public Customer? Customer { get; set; }
 	public RestBudget? RestBudget { get; set; }
@@ -32,5 +33,10 @@ public class Quote : AggregateRoot<QuoteId>
 	public void CalculateList( List<(string bookId, int quantity)> booksRequested, DateOnly customerRegisterDate )
 	{
 		AppendEvent( new ListPriceCalculated( booksRequested, customerRegisterDate ) ).Invoke();
+	}
+
+	public void CalculateBudget( List<string> bookIds, decimal budget, DateOnly customerRegisterDate )
+	{
+		AppendEvent( new BudgetCalculated( bookIds, budget, customerRegisterDate ) ).Invoke();
 	}
 }

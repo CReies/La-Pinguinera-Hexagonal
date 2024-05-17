@@ -5,7 +5,7 @@ namespace LaPinguinera.Quotes.Domain.Model.Quote.Factory;
 
 public class BookFactory
 {
-	public AbstractBook Create( string? title, string? author, decimal basePrice, BookType type )
+	public static AbstractBook Create( string? title, string? author, decimal basePrice, BookType type )
 	{
 		var bookChildren = new Dictionary<BookType, AbstractBook>
 		{

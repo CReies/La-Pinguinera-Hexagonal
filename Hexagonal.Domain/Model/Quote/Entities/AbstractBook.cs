@@ -53,13 +53,13 @@ public class AbstractBook : Entity<BookId>
 		Data = Data.Of( Data.Value.Title, Data.Value.Author, sellPrice, Data.Value.Type );
 	}
 
-	public void ApplyDiscount( CustomerSeniority customerSeniority )
+	public void ApplyDiscount( CustomerSeniorityEnum customerSeniority )
 	{
-		var seniorityDiscounts = new Dictionary<CustomerSeniority, decimal>
+		var seniorityDiscounts = new Dictionary<CustomerSeniorityEnum, decimal>
 		{
-			{ CustomerSeniority.LessOneYear, 0 },
-			{ CustomerSeniority.OneToTwoYears, 0.12m },
-			{ CustomerSeniority.MoreTwoYears, 0.17m }
+			{ CustomerSeniorityEnum.LessOneYear, 0 },
+			{ CustomerSeniorityEnum.OneToTwoYears, 0.12m },
+			{ CustomerSeniorityEnum.MoreTwoYears, 0.17m }
 		};
 
 		var seniorDiscount = seniorityDiscounts[customerSeniority];

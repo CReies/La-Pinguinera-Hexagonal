@@ -6,23 +6,24 @@ namespace LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 
 public class AbstractBook : Entity<BookId>
 {
-	public Data Data { get; set; }
-	public PriceModifiers PriceModifiers { get; set; }
-	public BaseIncrease BaseIncrease { get; set; }
-	public BasePrice BasePrice { get; set; }
-	public FinalPrice FinalPrice { get; set; }
+	public Data Data { get; protected set; }
+	public RetailIncrease? RetailIncrease { get; protected set; }
+	public WholeSaleDiscount? WholeSaleDiscount { get; protected set; }
+	public SeniorityDiscount? SeniorityDiscount { get; protected set; }
+	public BaseIncrease BaseIncrease { get; protected set; }
+	public BasePrice BasePrice { get; protected set; }
+	public SellPrice SellPrice { get; protected set; }
+	public FinalPrice? FinalPrice { get; protected set; }
 
-	public AbstractBook( BookId id, Data data, PriceModifiers priceModifiers, BaseIncrease baseIncrease, BasePrice basePrice, FinalPrice finalPrice ) : base( id )
+	protected AbstractBook( BookId id, Data data, BaseIncrease baseIncrease, BasePrice basePrice ) : base( id )
 	{
 		Data = data;
-		PriceModifiers = priceModifiers;
 		BaseIncrease = baseIncrease;
 		BasePrice = basePrice;
-		FinalPrice = finalPrice;
 	}
 
-	public AbstractBook( Data data, PriceModifiers priceModifiers, BaseIncrease baseIncrease, BasePrice basePrice, FinalPrice finalPrice ) :
-		this( new(), data, priceModifiers, baseIncrease, basePrice, finalPrice )
+	protected AbstractBook( Data data, BaseIncrease baseIncrease, BasePrice basePrice ) :
+		this( new(), data, baseIncrease, basePrice )
 	{ }
 
 	/*	
@@ -50,7 +51,7 @@ public class AbstractBook : Entity<BookId>
 	public void CalculateSellPrice()
 	{
 		var sellPrice = BasePrice.Value * (1 + BaseIncrease.Value);
-		Data = Data.Of( Data.Value.Title, Data.Value.Author, sellPrice, Data.Value.Type );
+		SellPrice = SellPrice.Of( sellPrice );
 	}
 
 	public void ApplyDiscount( CustomerSeniorityEnum customerSeniority )
@@ -63,8 +64,33 @@ public class AbstractBook : Entity<BookId>
 		};
 
 		var seniorDiscount = seniorityDiscounts[customerSeniority];
-		var finalPrice = BasePrice.Value * (1 + PriceModifiers.Value.RetailIncrease) * (1 - PriceModifiers.Value.WholeSaleDiscount) * (1 - seniorDiscount);
+		var finalPrice = BasePrice.Value * (1 + RetailIncrease.Value) * (1 - WholeSaleDiscount.Value) * (1 - seniorDiscount);
 
 		FinalPrice = FinalPrice.Of( finalPrice );
+	}
+
+	public void ChangeRetailIncrease( decimal value )
+	{
+		RetailIncrease = RetailIncrease.Of( value );
+	}
+
+	public void ChangeWholeSaleDiscount( decimal value )
+	{
+		WholeSaleDiscount = WholeSaleDiscount.Of( value );
+	}
+
+	public void ChangeSeniorityDiscount( decimal value )
+	{
+		SeniorityDiscount = SeniorityDiscount.Of( value );
+	}
+
+	public void ChangeSellPrice( decimal value )
+	{
+		SellPrice = SellPrice.Of( value );
+	}
+
+	public void ChangeFinalPrice( decimal value )
+	{
+		FinalPrice = FinalPrice.Of( value );
 	}
 }

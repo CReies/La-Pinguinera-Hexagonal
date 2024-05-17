@@ -5,30 +5,26 @@ namespace LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 
 public class Novel : AbstractBook
 {
-	private Novel( BookId id, Data data, PriceModifiers priceModifiers, BaseIncrease baseIncrease, BasePrice basePrice, FinalPrice finalPrice ) :
-		base( id, data, priceModifiers, baseIncrease, basePrice, finalPrice )
-	{ BaseIncrease = BaseIncrease.Of( 1m ); }
+	private Novel( BookId id, Data data, BaseIncrease baseIncrease, BasePrice basePrice ) :
+		base( id, data, baseIncrease, basePrice )
+	{ BaseIncrease = BaseIncrease.Of( 1m / 3m ); }
 
-	private Novel( Data data, PriceModifiers priceModifiers, BaseIncrease baseIncrease, BasePrice basePrice, FinalPrice finalPrice ) :
-		this( new(), data, priceModifiers, baseIncrease, basePrice, finalPrice )
-	{ BaseIncrease = BaseIncrease.Of( 1m ); }
+	private Novel( Data data, BaseIncrease baseIncrease, BasePrice basePrice ) :
+		this( new(), data, baseIncrease, basePrice )
+	{ BaseIncrease = BaseIncrease.Of( 1m / 3m ); }
 
 	public static Novel From( string? title, string? author, decimal basePrice ) => new
-			(
-				Data.Of( title, author, 0, BookType.NOVEL ),
-				PriceModifiers.Of( 0, 0, 0 ),
-				BaseIncrease.Of( 0 ),
-				BasePrice.Of( basePrice ),
-				FinalPrice.Of( 0 )
-			);
+		(
+			Data.Of( title, author, BookType.NOVEL ),
+			BaseIncrease.Of( 1m / 3m ),
+			BasePrice.Of( basePrice )
+		);
 
-	public static Novel From( string? id, string? title, string? author, decimal basePrice ) => new
+	public static Novel From( string? id, string? title, string author, decimal basePrice ) => new
 		(
 			BookId.Of( id ),
-			Data.Of( title, author, 0, BookType.NOVEL ),
-			PriceModifiers.Of( 0, 0, 0 ),
-			BaseIncrease.Of( 0 ),
-			BasePrice.Of( basePrice ),
-			FinalPrice.Of( 0 )
+			Data.Of( title, author, BookType.NOVEL ),
+			BaseIncrease.Of( 1m / 3m ),
+			BasePrice.Of( basePrice )
 		);
 }

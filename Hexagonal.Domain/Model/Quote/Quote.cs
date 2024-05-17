@@ -10,6 +10,7 @@ public class Quote : AggregateRoot<QuoteId>
 {
 	public List<AbstractBook> Inventory { get; set; } = [];
 	public (List<(List<AbstractBook> QuoteGroup, TotalPrice? TotalPrice, Discount? Discount)> Quote, TotalPrice? TotalPrice, Discount? Discount) Result { get; set; }
+	public Customer Customer { get; set; }
 	public RestBudget? RestBudget { get; set; }
 
 	public Quote( QuoteId id ) : base( id )
@@ -17,8 +18,8 @@ public class Quote : AggregateRoot<QuoteId>
 		Subscribe( new QuoteBehavior( this ) );
 	}
 
-	public void CalculateIndividualBook( string? title, string? author, decimal basePrice, BookType bookType )
+	public void CalculateIndividualBook( string? title, string? author, decimal basePrice, BookType bookType, DateOnly registerDate )
 	{
-		AppendEvent( new IndividualPriceCalculated( title, author, basePrice, bookType ) ).Invoke();
+		AppendEvent( new IndividualPriceCalculated( title, author, basePrice, bookType, registerDate ) ).Invoke();
 	}
 }

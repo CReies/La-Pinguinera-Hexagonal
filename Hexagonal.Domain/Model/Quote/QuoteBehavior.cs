@@ -2,6 +2,7 @@
 using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Factory;
+using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote;
@@ -22,8 +23,13 @@ public class QuoteBehavior : Behavior
 			book.CalculateSellPrice();
 
 			quote.Result.Quote.Add( ([book], null, null) );
-
+			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			quote.Inventory.Add( book );
 		} );
+	}
+
+	private void AddCalculateListSub( Quote quote )
+	{
+		AddSub
 	}
 }

@@ -25,9 +25,17 @@ public class Quote : AggregateRoot<QuoteId>
 		AppendEvent( new QuoteCreated() ).Invoke();
 	}
 
-	public void CalculateIndividual( string? title, string? author, decimal basePrice, BookType bookType, DateOnly registerDate )
+	public static Quote From( string quoteId, List<DomainEvent> events )
 	{
-		AppendEvent( new IndividualPriceCalculated( title, author, basePrice, bookType, registerDate ) ).Invoke();
+		var quote = new Quote( QuoteId.Of( quoteId ) );
+		events.ForEach( quote.Apply );
+
+		return new Quote();
+	}
+
+	public void CalculateIndividual( string? title, string? author, decimal basePrice, BookType bookType )
+	{
+		AppendEvent( new IndividualPriceCalculated( title, author, basePrice, bookType ) ).Invoke();
 	}
 
 	public void CalculateList( List<(string bookId, int quantity)> booksRequested, DateOnly customerRegisterDate )

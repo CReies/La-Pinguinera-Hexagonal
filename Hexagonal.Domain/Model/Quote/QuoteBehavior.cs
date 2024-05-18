@@ -42,7 +42,7 @@ public class QuoteBehavior : Behavior
 			book.CalculateSellPrice();
 
 			quote.Result.Quotes[0].Books.Add( book );
-			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
+			//quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			quote.Inventory.Add( book );
 		} );
 	}

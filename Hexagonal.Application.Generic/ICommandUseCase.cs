@@ -2,5 +2,5 @@
 
 public interface ICommandUseCase<T, I> where T : Command<I> where I : Identity
 {
-	IObservable<DomainEvent> Execute( IObservable<T> command );
+	IObservable<List<DomainEvent>> Execute( IObservable<T> command );
 }

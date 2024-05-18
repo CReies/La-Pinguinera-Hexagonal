@@ -13,7 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Hexagonal.Application.Generic\LaPinguinera.Quotes.Application.Generic.csproj" />
     <ProjectReference Include="..\Hexagonal.Domain.Generic\LaPinguinera.Quotes.Domain.Generic.csproj" />
-    <ProjectReference Include="..\Hezagonal.Domain\Hexagonal.Domain.csproj" />
   </ItemGroup>
 
 </Project>

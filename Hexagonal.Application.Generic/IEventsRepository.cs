@@ -2,6 +2,6 @@
 
 public interface IEventsRepository
 {
-	DomainEvent Save( DomainEvent domainEvent );
-	List<DomainEvent> FindByAggregateId( string aggregateId );
+	Task<DomainEvent> Save( DomainEvent domainEvent );
+	Task<List<DomainEvent>> FindByAggregateId( string aggregateId );
 }

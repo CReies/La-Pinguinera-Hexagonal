@@ -13,23 +13,26 @@ public class CalculateIndividualUseCase( IEventsRepository repository )
 {
 	private readonly IEventsRepository _repository = repository;
 
-	public IObservable<DomainEvent> Execute( IObservable<CalculateIndividualCommand> commandObservable )
+	public IObservable<List<DomainEvent>> Execute( IObservable<CalculateIndividualCommand> commandObservable )
 	{
 		return commandObservable.SelectMany( command =>
-		{
-			_repository.FindByAggregateId( command.AggregateId.Value ).ToObservable().SelectMany(
+
+		_repository.FindByAggregateId( command.AggregateId.Value )
+			.ToObservable()
+			.SelectMany(
 			events =>
-			{
-				var quote = Quote.From( command.AggregateId.Value, events );
-				quote.CalculateIndividual( command.Title, command.Author, command.Price, command.Type, command. );
+				{
+					var quote = Quote.From( command.AggregateId.Value, events );
+					quote.CalculateIndividual( command.Title, command.Author, command.Price, command.Type );
 
-				var domainEvents = quote.GetUncommittedChanges().ToObservable();
+					var domainEvents = quote.GetUncommittedChanges().ToList();
 
-				return domainEvents
-					.SelectMany( domainEvent => _repository.Save( domainEvent ) )
-					.Do( _ => quote.MarkAsCommitted() )
-					.Select( /* TODO: map the response */ _ => domainEvents );
-			} );
-		} );
+					return domainEvents.ToObservable()
+						.SelectMany( domainEvent => _repository.Save( domainEvent ).ToObservable() )
+						.ToList()
+						.Do( _ => quote.MarkAsCommitted() )
+						.Select( /* TODO: map the response */ _ => domainEvents );
+				} )
+		);
 	}
 }

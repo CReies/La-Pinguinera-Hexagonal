@@ -3,11 +3,9 @@ using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Factory;
 using LaPinguinera.Quotes.Domain.Model.Quote.Shared;
-using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
-using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote;
 
@@ -38,11 +36,11 @@ public class QuoteBehavior : Behavior
 		AddSub( ( IndividualPriceCalculated domainEvent ) =>
 		{
 			BookFactory _bookFactory = new();
-			var book = BookFactory.Create( domainEvent.Title, domainEvent.Author, domainEvent.BasePrice, domainEvent.BookType );
+			var book = _bookFactory.Create( domainEvent.Title, domainEvent.Author, domainEvent.BasePrice, domainEvent.BookType );
 			book.CalculateSellPrice();
 
 			quote.Result.Quotes[0].Books.Add( book );
-			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
+			//quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			quote.Inventory.Add( book );
 		} );
 	}

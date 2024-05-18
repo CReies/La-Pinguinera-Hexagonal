@@ -2,5 +2,5 @@
 
 public interface IInitialCommandUseCase<T> where T : InitialCommand
 {
-	List<DomainEvent> Execute( T command );
+	IObservable<DomainEvent> Execute( IObservable<T> command );
 }

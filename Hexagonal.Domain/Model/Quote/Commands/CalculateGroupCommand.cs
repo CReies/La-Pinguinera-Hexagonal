@@ -3,7 +3,7 @@ using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 
-public class CalculateGroups(
+public class CalculateGroupCommand(
 	string quoteId,
 	List<List<(string bookId, int bookQuantity)>> bookGroups,
 	DateOnly customerRegisterDate

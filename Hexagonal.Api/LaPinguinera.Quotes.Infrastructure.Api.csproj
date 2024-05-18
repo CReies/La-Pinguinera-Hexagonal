@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Hexagonal.Application\LaPinguinera.Quotes.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

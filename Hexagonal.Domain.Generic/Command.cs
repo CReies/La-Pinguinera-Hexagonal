@@ -6,5 +6,4 @@ public abstract class Command<T>( T aggregateId ) where T : Identity
 }
 
 public abstract class InitialCommand
-{
-}
+{ }

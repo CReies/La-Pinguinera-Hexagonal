@@ -1,6 +1,6 @@
 ﻿namespace LaPinguinera.Application.Generic;
 
-public interface IInitialCommandUseCase<T> where T : InitialCommand
+public interface IInitialCommandUseCase<T, I> where T : InitialCommand
 {
-	IObservable<DomainEvent> Execute( IObservable<T> command );
+	IObservable<I> Execute( IObservable<T> command );
 }

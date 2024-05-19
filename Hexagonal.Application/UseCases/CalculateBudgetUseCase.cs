@@ -26,14 +26,14 @@ public class CalculateBudgetUseCase( IEventsRepository repository )
 				var quote = Quote.From( command.AggregateId.Value, events );
 				quote.CalculateBudget( command.BookIds, command.Budget, command.CustomerRegisterDate );
 
-				var domainEvents = quote.GetUncommittedChanges().ToList();
+				var domainEvents = quote.GetUncommittedChanges();
 				CalculateBudgetResMapper mapper = new();
 
 				return domainEvents.ToObservable()
 					.SelectMany( domainEvent => _repository.Save( domainEvent ).ToObservable() )
 					.ToList()
 					.Do( _ => quote.MarkAsCommitted() )
-					.Select( _ => mapper.Map(quote.Result, quote.RestBudget.Value) );
+					.Select( _ => mapper.Map(quote.Result, quote.RestBudget!.Value) );
 			} )
 		);
 	}

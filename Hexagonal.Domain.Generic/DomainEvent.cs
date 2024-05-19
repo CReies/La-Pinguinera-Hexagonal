@@ -1,4 +1,6 @@
-﻿namespace LaPinguinera.Domain.Generic;
+﻿using System.Text.Json.Serialization;
+
+namespace LaPinguinera.Domain.Generic;
 
 public abstract class DomainEvent
 {
@@ -28,5 +30,17 @@ public abstract class DomainEvent
 
 		AggregateName = string.Empty;
 		AggregateId = string.Empty;
+	}
+
+
+	[JsonConstructor]
+	protected DomainEvent( DateTime moment, int version, string uuid, string type, string aggregateName, string aggregateId )
+	{
+		Moment = moment;
+		Version = version;
+		UUID = uuid;
+		Type = type;
+		AggregateName = aggregateName;
+		AggregateId = aggregateId;
 	}
 }

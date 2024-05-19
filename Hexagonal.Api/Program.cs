@@ -1,5 +1,5 @@
 using LaPinguinera.Application;
-using LaPinguinera.Quotes.Infrastructure.Persistence;
+using LaPinguinera.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder( args );
 

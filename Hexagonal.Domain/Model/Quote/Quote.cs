@@ -31,7 +31,7 @@ public class Quote : AggregateRoot<QuoteId>
 		var quote = new Quote( QuoteId.Of( quoteId ) );
 		events.ForEach( quote.Apply );
 
-		return new Quote();
+		return quote;
 	}
 
 	public void CalculateIndividual( string? title, string? author, decimal basePrice, BookType bookType )

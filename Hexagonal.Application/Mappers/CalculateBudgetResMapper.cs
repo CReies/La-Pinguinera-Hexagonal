@@ -9,15 +9,15 @@ public class CalculateBudgetResMapper
 	{
 		return new CalculateBudgetResDTO
 		{
-			Books = result.Quotes.Select( q => new CalculateIndividualResDTO
+			Books = result.Quotes[0].Books.Select( b => new CalculateIndividualResDTO
 			{
-				Id = q.Books[0].Id.Value,
-				Title = q.Books[0].Data.Value.Title,
-				Author = q.Books[0].Data.Value.Author,
-				Price = q.Books[0].SellPrice.Value,
+				Id = b.Id.Value,
+				Title = b.Data.Value.Title,
+				Author = b.Data.Value.Author,
+				Price = b.FinalPrice!.Value,
 			} ).ToList(),
-			TotalPrice = result.TotalPrice,
-			TotalDiscount = result.TotalDiscount,
+			TotalPrice = result.Quotes[0].TotalPrice,
+			TotalDiscount = result.Quotes[0].TotalDiscount,
 			RestOfBudget = restOfBudget,
 		};
 	}

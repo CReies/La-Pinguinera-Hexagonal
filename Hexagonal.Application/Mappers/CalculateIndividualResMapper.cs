@@ -13,6 +13,7 @@ public class CalculateIndividualMapper
 			Title = result.Quotes[0].Books[0].Data.Value.Title,
 			Author = result.Quotes[0].Books[0].Data.Value.Author,
 			Price = result.Quotes[0].Books[0].SellPrice.Value,
+			Type = result.Quotes[0].Books[0].Data.Value.Type,
 		};
 	}
 }

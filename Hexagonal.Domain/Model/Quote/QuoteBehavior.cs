@@ -22,8 +22,10 @@ public class QuoteBehavior : Behavior
 
 	private void AddQuoteCreatedSub( Quote quote )
 	{
-		AddSub( ( QuoteCreated domainEvent ) =>
+		AddSub( ( DomainEvent @event ) =>
 		{
+			if (@event is not QuoteCreated) return;
+			var domainEvent = @event as QuoteCreated;
 			quote.Result = new Result();
 			quote.RequestedBooks = [];
 			quote.Customer = null;
@@ -33,13 +35,18 @@ public class QuoteBehavior : Behavior
 
 	private void AddCalculateIndividualSub( Quote quote )
 	{
-		AddSub( ( IndividualPriceCalculated domainEvent ) =>
+		AddSub( ( DomainEvent @event ) =>
+
 		{
+			if (@event is not IndividualPriceCalculated) return;
+			var domainEvent = (IndividualPriceCalculated)@event;
+
 			BookFactory _bookFactory = new();
 			var book = _bookFactory.Create( domainEvent.Title, domainEvent.Author, domainEvent.BasePrice, domainEvent.BookType );
 			book.CalculateSellPrice();
 
 			quote.Result.Quotes[0].Books.Add( book );
+
 			//quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			quote.Inventory.Add( book );
 		} );
@@ -47,8 +54,12 @@ public class QuoteBehavior : Behavior
 
 	private void AddCalculateListSub( Quote quote )
 	{
-		AddSub( ( ListPriceCalculated domainEvent ) =>
+		AddSub( ( DomainEvent @event ) =>
+
 		{
+			if (@event is not ListPriceCalculated) return;
+			var domainEvent = (ListPriceCalculated)@event;
+
 			domainEvent.BooksRequested.ForEach( ( bookTuple ) =>
 			{
 				var (bookId, bookQuantity) = bookTuple;
@@ -89,8 +100,12 @@ public class QuoteBehavior : Behavior
 
 	private void AddCalculateBudgetSub( Quote quote )
 	{
-		AddSub( ( BudgetCalculated domainEvent ) =>
+		AddSub( ( DomainEvent @event ) =>
+
 		{
+			if (@event is not BudgetCalculated) return;
+			var domainEvent = (BudgetCalculated)@event;
+
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 
 			var cheapBook = quote.Inventory
@@ -166,8 +181,12 @@ public class QuoteBehavior : Behavior
 
 	private void AddCalculateGroupSub( Quote quote )
 	{
-		AddSub( ( GroupPriceCalculated domainEvent ) =>
+		AddSub( ( DomainEvent @event ) =>
+
 		{
+			if (@event is not GroupPriceCalculated) return;
+			var domainEvent = (GroupPriceCalculated)@event;
+
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 
 			domainEvent.GroupsRequested.ForEach( ( group ) =>

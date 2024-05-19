@@ -27,7 +27,7 @@ public class QuoteBehavior : Behavior
 			if (@event is not QuoteCreated) return;
 			var domainEvent = @event as QuoteCreated;
 			quote.Result = new Result();
-			quote.RequestedBooks = [];
+			quote.RequestedBooks = [[]];
 			quote.Customer = null;
 			quote.Inventory = [];
 		} );
@@ -36,19 +36,21 @@ public class QuoteBehavior : Behavior
 	private void AddCalculateIndividualSub( Quote quote )
 	{
 		AddSub( ( DomainEvent @event ) =>
-
 		{
 			if (@event is not IndividualPriceCalculated) return;
 			var domainEvent = (IndividualPriceCalculated)@event;
 
+			ClearResult( quote );
+
 			BookFactory _bookFactory = new();
-			var book = _bookFactory.Create( domainEvent.Title, domainEvent.Author, domainEvent.BasePrice, domainEvent.BookType );
+			var book = _bookFactory.Create( domainEvent.BookId, domainEvent.Title, domainEvent.Author, domainEvent.BasePrice, domainEvent.BookType );
 			book.CalculateSellPrice();
 
 			quote.Result.Quotes[0].Books.Add( book );
 
 			//quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			quote.Inventory.Add( book );
+			domainEvent.BookId = book.Id.Value;
 		} );
 	}
 
@@ -60,11 +62,16 @@ public class QuoteBehavior : Behavior
 			if (@event is not ListPriceCalculated) return;
 			var domainEvent = (ListPriceCalculated)@event;
 
+			ClearResult( quote );
+
 			domainEvent.BooksRequested.ForEach( ( bookTuple ) =>
 			{
 				var (bookId, bookQuantity) = bookTuple;
 
-				var book = quote.Inventory.Find( book => book.Id.Value == bookId ) ?? throw new KeyNotFoundException( "Book not found" );
+				var bookFromInventory = quote.Inventory.Find( book => book.Id.Value == bookId ) ?? throw new KeyNotFoundException( "Book not found" );
+
+				var book = bookFromInventory.Clone();
+
 				for (int i = 0; i < bookQuantity; i++)
 				{
 					quote.RequestedBooks[0].Add( book );
@@ -87,67 +94,81 @@ public class QuoteBehavior : Behavior
 
 			for (int i = 0; i < books.Count; i++)
 			{
-				var book = books[i];
+				var book = books[i].Clone();
 
 				book.ChangeRetailIncrease( isRetail ? 0.02m : 0 );
 				book.ChangeWholeSaleDiscount( i > 9 ? 0.0015m * (i - 9) : 0 );
 				book.ApplyDiscount( seniority );
 
 				book.ApplyDiscount( seniority );
+
+				quote.Result.Quotes[0].Books.Add( book );
 			}
+			var totalPrice = quote.Result.Quotes[0].Books.Sum( book => book.FinalPrice!.Value );
+			var totalSellPrice = quote.Result.Quotes[0].Books.Sum( book => book.SellPrice.Value );
+			var totalDiscount = totalSellPrice - totalPrice;
+
+			quote.Result.Quotes[0].TotalPrice = totalPrice;
+			quote.Result.Quotes[0].TotalDiscount = Math.Max( totalDiscount, 0 );
 		} );
 	}
 
 	private void AddCalculateBudgetSub( Quote quote )
 	{
 		AddSub( ( DomainEvent @event ) =>
-
 		{
 			if (@event is not BudgetCalculated) return;
 			var domainEvent = (BudgetCalculated)@event;
 
+			ClearResult( quote );
+
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
+
+			quote.Customer.CalculateSeniority();
 
 			var cheapBook = quote.Inventory
 				.Where( book => book.Data.Value.Type == BookType.BOOK )
 				.OrderBy( book => book.SellPrice.Value )
-				.First();
+				.First()
+				.Clone();
 
 			var cheapNovel = quote.Inventory
 				.Where( book => book.Data.Value.Type == BookType.NOVEL )
 				.OrderBy( book => book.SellPrice.Value )
-				.First();
+				.First()
+				.Clone();
 
 			var expensiveBook = cheapBook.SellPrice.Value > cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
 			var cheapestBook = cheapBook.SellPrice.Value < cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
 
-			SetMaxBooksAndRemainingBudget( quote, cheapBook, expensiveBook, quote.Customer!.Seniority, domainEvent.Budget );
+			SetMaxBooksAndRemainingBudget( quote, cheapBook.Clone(), expensiveBook.Clone(), quote.Customer!.Seniority, domainEvent.Budget );
 		} );
 	}
 
 	private void SetMaxBooksAndRemainingBudget( Quote quote, AbstractBook cheapBook, AbstractBook expensiveBook, CustomerSeniority seniority, decimal totalBudget )
 	{
 		var budget = totalBudget - expensiveBook.SellPrice.Value;
+
+		expensiveBook.ApplyDiscount( seniority.Value );
+		quote.Result.Quotes[0].Books.Add( expensiveBook.Clone() );
+
 		var restOfBudget = budget;
 
 		int quantity;
 
 		for (quantity = 0; quantity < 600; quantity++)
 		{
-			var bookEntity = GetBookEntity( cheapBook, quantity, seniority );
+			var bookEntity = GetBookEntity( cheapBook.Clone(), quantity, seniority );
 
 			if (restOfBudget < bookEntity.FinalPrice!.Value) break;
 
 			restOfBudget -= bookEntity.FinalPrice.Value;
+			quote.Result.Quotes[0].Books.Add( bookEntity.Clone() );
 		}
 
 		if (quantity <= 10) throw new ArgumentException( "You don't have enough budget for a major sale" );
-		quote.Result.Quotes[0].Books.Add( expensiveBook );
 
-		for (int i = 0; i < quantity; i++)
-		{
-			quote.Result.Quotes[0].Books.Add( cheapBook );
-		}
+		
 
 		quote.RestBudget = RestBudget.Of( restOfBudget );
 		quote.Result.Quotes[0].TotalPrice = totalBudget - restOfBudget;
@@ -182,10 +203,11 @@ public class QuoteBehavior : Behavior
 	private void AddCalculateGroupSub( Quote quote )
 	{
 		AddSub( ( DomainEvent @event ) =>
-
 		{
 			if (@event is not GroupPriceCalculated) return;
 			var domainEvent = (GroupPriceCalculated)@event;
+
+			ClearResult( quote );
 
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 
@@ -194,7 +216,10 @@ public class QuoteBehavior : Behavior
 				for (int i = 0; i < group.Count; i++)
 				{
 					var (bookId, bookQuantity) = group[i];
-					var book = quote.Inventory.Find( book => book.Id.Value == bookId ) ?? throw new KeyNotFoundException( "Book not found" );
+					var bookFromInventory = quote.Inventory.Find( book => book.Id.Value == bookId ) ?? throw new KeyNotFoundException( "Book not found" );
+
+					var book = bookFromInventory.Clone();
+
 					for (int j = 0; j < bookQuantity; j++)
 					{
 						quote.RequestedBooks[i].Add( book );
@@ -207,5 +232,13 @@ public class QuoteBehavior : Behavior
 				CalculatePrices( quote );
 			} );
 		} );
+	}
+
+	private static void ClearResult( Quote quote )
+	{
+		quote.Result = new Result();
+		quote.RequestedBooks = [[]];
+		quote.Customer = null;
+		quote.RestBudget = null;
 	}
 }

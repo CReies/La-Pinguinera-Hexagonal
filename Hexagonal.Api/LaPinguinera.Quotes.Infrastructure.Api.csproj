@@ -12,10 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Hexagonal.Application\LaPinguinera.Quotes.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\LaPinguinera.Quotes.Infrastructure.Persistence\LaPinguinera.Quotes.Infrastructure.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

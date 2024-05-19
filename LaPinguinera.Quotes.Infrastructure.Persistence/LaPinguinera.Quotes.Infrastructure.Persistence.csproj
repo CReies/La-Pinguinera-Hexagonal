@@ -9,11 +9,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.25.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Hexagonal.Application.Generic\LaPinguinera.Quotes.Application.Generic.csproj" />
+    <ProjectReference Include="..\Hexagonal.Domain\LaPinguinera.Quotes.Domain.csproj" />
   </ItemGroup>
 
 </Project>

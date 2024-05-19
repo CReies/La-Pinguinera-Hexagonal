@@ -2,9 +2,8 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using System.Text.Json;
-using Final.Project.Domain.ItemLiterature.Events;
 
-namespace LaPinguinera.Quotes.Infrastructure.Persistence;
+namespace LaPinguinera.Infrastructure.Persistence;
 
 public class Event
 {
@@ -19,17 +18,15 @@ public class Event
 
 	public static string WrapEvent( DomainEvent domainEvent )
 	{
-		var options = new JsonSerializerOptions();
+		var options = new JsonSerializerOptions() { IncludeFields = true };
 		options.Converters.Add( new DomainEventConverter() );
 		return JsonSerializer.Serialize( domainEvent, options );
 	}
 
 	public static DomainEvent DeserializeEvent( string json )
 	{
-		var options = new JsonSerializerOptions();
+		var options = new JsonSerializerOptions() { IncludeFields = true };
 		options.Converters.Add( new DomainEventConverter() );
 		return JsonSerializer.Deserialize<DomainEvent>( json, options )!;
 	}
-
-
 }

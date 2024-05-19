@@ -87,22 +87,24 @@ public class QuoteBehavior : Behavior
 
 	private static void CalculatePrices( Quote quote )
 	{
-		quote.RequestedBooks.ForEach( books =>
+		for (int i = 0; i < quote.RequestedBooks.Count; i++)
 		{
+			var books = quote.RequestedBooks[i];
+
 			var isRetail = books.Count <= 10;
 			var seniority = quote.Customer!.Seniority.Value;
 
-			for (int i = 0; i < books.Count; i++)
+			for (int j = 0; j < books.Count; j++)
 			{
-				var book = books[i].Clone();
+				var book = books[j].Clone();
 
-				book.ChangeRetailIncrease( isRetail ? 0.02m : 0 );
-				book.ChangeWholeSaleDiscount( i > 9 ? 0.0015m * (i - 9) : 0 );
+				book.ChangeRetailIncrease( isRetail ? 0.02m : 0 ); // TODO: Magic number
+				book.ChangeWholeSaleDiscount( j > 9 ? 0.0015m * (j - 9) : 0 );
 				book.ApplyDiscount( seniority );
 
-				book.ApplyDiscount( seniority );
+				if (quote.Result.Quotes.Count < i + 1) quote.Result.Quotes.Add( new GroupQuote() );
 
-				quote.Result.Quotes[0].Books.Add( book );
+				quote.Result.Quotes[i].Books.Add( book.Clone() );
 			}
 			var totalPrice = quote.Result.Quotes[0].Books.Sum( book => book.FinalPrice!.Value );
 			var totalSellPrice = quote.Result.Quotes[0].Books.Sum( book => book.SellPrice.Value );
@@ -110,7 +112,7 @@ public class QuoteBehavior : Behavior
 
 			quote.Result.Quotes[0].TotalPrice = totalPrice;
 			quote.Result.Quotes[0].TotalDiscount = Math.Max( totalDiscount, 0 );
-		} );
+		}
 	}
 
 	private void AddCalculateBudgetSub( Quote quote )
@@ -168,7 +170,7 @@ public class QuoteBehavior : Behavior
 
 		if (quantity <= 10) throw new ArgumentException( "You don't have enough budget for a major sale" );
 
-		
+
 
 		quote.RestBudget = RestBudget.Of( restOfBudget );
 		quote.Result.Quotes[0].TotalPrice = totalBudget - restOfBudget;
@@ -219,6 +221,8 @@ public class QuoteBehavior : Behavior
 					var bookFromInventory = quote.Inventory.Find( book => book.Id.Value == bookId ) ?? throw new KeyNotFoundException( "Book not found" );
 
 					var book = bookFromInventory.Clone();
+
+					quote.RequestedBooks.Add( [] );
 
 					for (int j = 0; j < bookQuantity; j++)
 					{

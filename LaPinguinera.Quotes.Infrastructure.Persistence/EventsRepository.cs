@@ -1,29 +1,39 @@
 ﻿using LaPinguinera.Application.Generic;
 using LaPinguinera.Domain.Generic;
+using LaPinguinera.Infrastructure.Persistence;
 using MongoDB.Driver;
 
-namespace LaPinguinera.Quotes.Infrastructure.Persistence;
-
-public class EventsRepository : IEventsRepository
+namespace Hexagonal.Library.Quotes.Infrastructure.Persistence
 {
-	private readonly IMongoCollection<DomainEvent> _eventRepository;
-
-	public EventsRepository( IMongoCollection<DomainEvent> repository )
+	public class EventsRepository : IEventsRepository
 	{
-		_eventRepository = repository;
-	}
+		private readonly IMongoCollection<Event> _eventRepository;
 
-	public async Task<List<DomainEvent>> FindByAggregateId( string aggregateId )
-	{
-		var filter = Builders<DomainEvent>.Filter.Eq( e => e.AggregateId, aggregateId );
-		var cursor = await _eventRepository.FindAsync( filter );
-		return cursor.ToList();
-	}
+		public EventsRepository( IMongoCollection<Event> repository )
+		{
+			_eventRepository = repository;
+		}
 
-	public async Task<List<DomainEvent>> Save( DomainEvent domainEvent )
-	{
-		await _eventRepository.InsertOneAsync( domainEvent );
+		public async Task<List<DomainEvent>> FindByAggregateId( string aggregateId )
+		{
+			var cursor = await _eventRepository.FindAsync( ( eve )
+					=> eve.AggregateId.Equals( aggregateId ) );
+			var events = await cursor.ToListAsync();
+			return events.Select( e => Event.DeserializeEvent( e.EventBody ) ).ToList();
+		}
 
-		return await FindByAggregateId( domainEvent.AggregateId );
+		public async Task<List<DomainEvent>> Save( DomainEvent domainEvent )
+		{
+			var @event = new Event()
+			{
+				AggregateId = domainEvent.AggregateId,
+				Type = domainEvent.Type,
+				Moment = domainEvent.Moment,
+				EventBody = Event.WrapEvent( domainEvent )
+			};
+
+			await _eventRepository.InsertOneAsync( @event );
+			return await FindByAggregateId( domainEvent.AggregateId );
+		}
 	}
 }

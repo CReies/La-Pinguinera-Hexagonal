@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using LaPinguinera.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 
-namespace Final.Project.Domain.ItemLiterature.Events;
+namespace LaPinguinera.Infrastructure.Persistence;
 
 public class DomainEventConverter : JsonConverter<DomainEvent>
 {

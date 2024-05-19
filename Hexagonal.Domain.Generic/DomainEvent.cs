@@ -11,7 +11,7 @@ public abstract class DomainEvent
 
 	public DomainEvent( string type, string aggregateName, string aggregateId )
 	{
-		this.Type = type;
+		Type = type;
 		AggregateName = aggregateName;
 		AggregateId = aggregateId;
 		Moment = DateTime.Now;
@@ -21,7 +21,7 @@ public abstract class DomainEvent
 
 	public DomainEvent( string type )
 	{
-		this.Type = type;
+		Type = type;
 		Moment = DateTime.Now;
 		UUID = Guid.NewGuid().ToString();
 		Version = 1;

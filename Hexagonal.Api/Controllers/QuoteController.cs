@@ -96,4 +96,35 @@ public class QuoteController : ControllerBase
 			return BadRequest( ex.Message );
 		}
 	}
+
+	[HttpPost( "group" )]
+	public async Task<IActionResult> CalculateGroup
+(
+	[FromBody] CalculateGroupReqDTO request,
+	[FromServices] ICommandUseCase<CalculateGroupCommand, QuoteId, CalculateGroupResDTO> useCaseCommand
+)
+	{
+		try
+		{
+			var bookIdWithQuantityGroup = request.Group
+				.Select( g => g
+					.Select( b => (bookId: b.BookId, quantity: b.Quantity) )
+					.ToList() )
+				.ToList();
+			var command = new CalculateGroupCommand(
+				request.AggregateId,
+				bookIdWithQuantityGroup,
+				request.CustomerRegisterDate
+			);
+			var subject = Observable.Return( command );
+			var resultObservable = useCaseCommand.Execute( subject );
+			var result = await resultObservable.FirstAsync();
+
+			return Ok( result );
+		}
+		catch (Exception ex)
+		{
+			return BadRequest( ex.Message );
+		}
+	}
 }

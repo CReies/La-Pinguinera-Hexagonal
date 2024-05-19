@@ -33,7 +33,7 @@ public class CalculateGroupUseCase( IEventsRepository repository )
 					.SelectMany( domainEvent => _repository.Save( domainEvent ).ToObservable() )
 					.ToList()
 					.Do( _ => quote.MarkAsCommitted() )
-					.Select( /* TODO: map the response */ _ => mapper.Map( quote.Result ) );
+					.Select( _ => mapper.Map( quote.Result ) );
 			} )
 		);
 	}

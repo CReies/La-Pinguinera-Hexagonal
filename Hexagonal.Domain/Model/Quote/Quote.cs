@@ -17,6 +17,7 @@ public class Quote : AggregateRoot<QuoteId>
 
 	public Quote( QuoteId id ) : base( id )
 	{
+		Subscribe( new QuoteBehavior( this ) );
 	}
 
 	public Quote() : base( new QuoteId() )

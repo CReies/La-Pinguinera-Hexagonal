@@ -4,7 +4,7 @@ using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 
-public class AbstractBook : Entity<BookId>
+public abstract class AbstractBook : Entity<BookId>
 {
 	public Data Data { get; protected set; }
 	public RetailIncrease? RetailIncrease { get; protected set; }
@@ -26,28 +26,6 @@ public class AbstractBook : Entity<BookId>
 		this( new(), data, baseIncrease, basePrice )
 	{ }
 
-	/*	
-	 *	En los child
-	 *	
-	 *	public AbstractBook From( string? title, string author, decimal basePrice, BookType type ) => new
-			(
-				Data.Of( title, author, 0, type ),
-				PriceModifiers.Of( 0, 0, 0 ),
-				BaseIncrease.Of( 0 ),
-				BasePrice.Of( basePrice ),
-				FinalPrice.Of( 0 )
-			);
-
-		public AbstractBook From( string? id, string? title, string author, decimal basePrice, BookType type ) => new
-			(
-				BookId.Of( id ),
-				Data.Of( title, author, 0, type ),
-				PriceModifiers.Of( 0, 0, 0 ),
-				BaseIncrease.Of( 0 ),
-				BasePrice.Of( basePrice ),
-				FinalPrice.Of( 0 )
-			);*/
-
 	public void CalculateSellPrice()
 	{
 		var sellPrice = BasePrice.Value * (1 + BaseIncrease.Value);
@@ -63,11 +41,16 @@ public class AbstractBook : Entity<BookId>
 			{ CustomerSeniorityEnum.MoreTwoYears, 0.17m }
 		};
 
+		if (RetailIncrease is null) ChangeRetailIncrease( 0 );
+		if (WholeSaleDiscount is null) ChangeWholeSaleDiscount( 0 );
+
 		var seniorDiscount = seniorityDiscounts[customerSeniority];
-		var finalPrice = BasePrice.Value * (1 + RetailIncrease.Value) * (1 - WholeSaleDiscount.Value) * (1 - seniorDiscount);
+		var finalPrice = SellPrice.Value * (1 + RetailIncrease!.Value) * (1 - WholeSaleDiscount!.Value) * (1 - seniorDiscount);
 
 		FinalPrice = FinalPrice.Of( finalPrice );
 	}
+
+	public abstract AbstractBook Clone();
 
 	public void ChangeRetailIncrease( decimal value )
 	{

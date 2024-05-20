@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 
 namespace LaPinguinera.Quotes.Application.UseCases;
 
-public class GetAggregateUseCase( IEventsRepository eventsRepository ) : IGetAggregateUseCase<GetAggregateResDTO>
+public class GetAggregateUseCase( IEventsRepository eventsRepository ) : IGetUseCase<GetAggregateResDTO>
 {
 	private readonly IEventsRepository _repository = eventsRepository;
 

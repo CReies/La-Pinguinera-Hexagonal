@@ -34,7 +34,7 @@ public class QuoteController : ControllerBase
 	[HttpGet]
 	public async Task<IActionResult> GetAggregate
 	(
-				[FromServices] IGetAggregateUseCase<GetAggregateResDTO> useCase
+				[FromServices] IGetUseCase<GetAggregateResDTO> useCase
 			)
 	{
 		try

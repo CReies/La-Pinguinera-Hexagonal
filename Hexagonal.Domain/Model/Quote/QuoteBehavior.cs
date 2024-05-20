@@ -78,11 +78,7 @@ public class QuoteBehavior : Behavior
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			_ = quote.Customer.CalculateSeniority();
 
-			(IResult result, List<List<AbstractBook>> requestedBooks, decimal restBudget) = quote.BudgetQuoteCalculate.Calculate( quote.Inventory, domainEvent.BookIds, quote.Customer.Seniority.Value, domainEvent.Budget );
-
-			quote.Result = result;
-			quote.RequestedBooks = requestedBooks;
-			quote.RestBudget = RestBudget.Of( restBudget );
+			quote.BudgetQuoteCalculate.Calculate( quote.Inventory, domainEvent.BookIds, quote.Customer.Seniority.Value, domainEvent.Budget );
 		} );
 	}
 

@@ -30,10 +30,10 @@ public class CalculateBudgetUseCase( IEventsRepository repository )
 					CalculateBudgetResMapper mapper = new();
 
 					return domainEvents.ToObservable()
-									.SelectMany( domainEvent => _repository.Save( domainEvent ).ToObservable() )
-									.ToList()
-									.Do( _ => quote.MarkAsCommitted() )
-									.Select( _ => mapper.Map( quote.Result, quote.RestBudget!.Value ) );
+						.SelectMany( domainEvent => _repository.Save( domainEvent ).ToObservable() )
+						.ToList()
+						.Do( _ => quote.MarkAsCommitted() )
+						.Select( _ => mapper.Map( quote.BudgetQuoteCalculate.Result ) );
 				} )
 		);
 	}

@@ -18,6 +18,7 @@ public class CalculateGroupResMapper
 					Author = b.Data.Value.Author,
 					Price = b.FinalPrice!.Value,
 					Type = b.Data.Value.Type,
+					Discount = b.Discount!.Value,
 				} ).ToList(),
 				TotalPrice = q.TotalPrice,
 				TotalDiscount = q.TotalDiscount,

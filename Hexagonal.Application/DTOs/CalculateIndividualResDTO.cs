@@ -9,4 +9,5 @@ public class CalculateIndividualResDTO
 	public string Author { get; set; }
 	public decimal Price { get; set; }
 	public BookType Type { get; set; }
+	public decimal Discount { get; set; }
 }

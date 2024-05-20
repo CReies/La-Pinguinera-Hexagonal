@@ -16,6 +16,7 @@ public class CalculateBudgetResMapper
 				Author = b.Data.Value.Author,
 				Price = b.FinalPrice!.Value,
 				Type = b.Data.Value.Type,
+				Discount = b.Discount!.Value,
 			} ).ToList(),
 			TotalPrice = result.Quotes[0].TotalPrice,
 			TotalDiscount = result.Quotes[0].TotalDiscount,

@@ -16,6 +16,7 @@ public class CalculateListResMapper
 				Author = book.Data.Value.Author,
 				Price = book.FinalPrice!.Value,
 				Type = book.Data.Value.Type,
+				Discount = book.Discount!.Value,
 			} ).ToList(),
 			TotalPrice = result.Quotes[0].TotalPrice,
 			TotalDiscount = result.Quotes[0].TotalDiscount,

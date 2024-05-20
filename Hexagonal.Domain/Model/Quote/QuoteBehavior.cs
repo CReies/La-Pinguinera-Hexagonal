@@ -125,20 +125,23 @@ public class QuoteBehavior : Behavior
 			ClearResult( quote );
 
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
-
 			quote.Customer.CalculateSeniority();
 
-			var cheapBook = quote.Inventory
-				.Where( book => book.Data.Value.Type == BookType.BOOK )
+			var cheapBookFromInventory = quote.Inventory
+				.Where( book =>
+				book.Data.Value.Type == BookType.BOOK && domainEvent.BookIds.Contains( book.Id.Value ) )
 				.OrderBy( book => book.SellPrice.Value )
-				.First()
-				.Clone();
+				.FirstOrDefault() ?? throw new KeyNotFoundException( "You need to request at least one book" );
 
-			var cheapNovel = quote.Inventory
-				.Where( book => book.Data.Value.Type == BookType.NOVEL )
-				.OrderBy( book => book.SellPrice.Value )
-				.First()
-				.Clone();
+			var cheapNovelFromInventory = quote.Inventory
+				.Where( novel => novel.Data.Value.Type == BookType.NOVEL && domainEvent.BookIds.Contains( novel.Id.Value ) )
+				.OrderBy( novel => novel.SellPrice.Value )
+				.FirstOrDefault() ?? throw new KeyNotFoundException( "You need to request at least one novel" );
+
+			var cheapBook = cheapBookFromInventory.Clone();
+			var cheapNovel = cheapNovelFromInventory.Clone();
+
+			quote.RequestedBooks.Add( [cheapBook, cheapNovel] );
 
 			var expensiveBook = cheapBook.SellPrice.Value > cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
 			var cheapestBook = cheapBook.SellPrice.Value < cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;

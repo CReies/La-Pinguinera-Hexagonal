@@ -13,7 +13,7 @@ public class CreationQuoteCalculate : Entity<CreationQuoteCalculateId>
 	public CreationQuoteCalculate() : this( new() )
 	{ }
 
-	public static AbstractBook Calculate( string bookId, string title, string author, decimal basePrice, BookType type )
+	public AbstractBook Calculate( string bookId, string title, string author, decimal basePrice, BookType type )
 	{
 		BookFactory _bookFactory = new();
 		AbstractBook book = _bookFactory.Create( bookId, title, author, basePrice, type );

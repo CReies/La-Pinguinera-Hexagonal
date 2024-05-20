@@ -16,7 +16,7 @@ public class GroupQuoteCalculate : Entity<GroupQuoteCalculateId>
 	public GroupQuoteCalculate() : this( new() )
 	{ }
 
-	public static (IResult result, List<List<AbstractBook>> requestedBooks) CalculateList( List<(string bookId, int quantity)> booksRequested, CustomerSeniorityEnum seniority, List<AbstractBook> inventory )
+	public (IResult result, List<List<AbstractBook>> requestedBooks) CalculateList( List<(string bookId, int quantity)> booksRequested, CustomerSeniorityEnum seniority, List<AbstractBook> inventory )
 	{
 		List<List<AbstractBook>> requestedBooks = [[]];
 		booksRequested.ForEach( ( bookTuple ) =>
@@ -37,7 +37,7 @@ public class GroupQuoteCalculate : Entity<GroupQuoteCalculateId>
 		return (result, requestedBooks);
 	}
 
-	public static (IResult result, List<List<AbstractBook>> requestedBooks) CalculateGroups( List<List<(string bookId, int quantity)>> booksRequested, CustomerSeniorityEnum seniority, List<AbstractBook> inventory )
+	public (IResult result, List<List<AbstractBook>> requestedBooks) CalculateGroups( List<List<(string bookId, int quantity)>> booksRequested, CustomerSeniorityEnum seniority, List<AbstractBook> inventory )
 	{
 		IResult result = new Result();
 		List<List<AbstractBook>> requestedBooks = [];

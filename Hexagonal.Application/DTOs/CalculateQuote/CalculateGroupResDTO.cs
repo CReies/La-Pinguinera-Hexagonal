@@ -1,4 +1,4 @@
-﻿namespace LaPinguinera.Quotes.Application.DTOs;
+﻿namespace LaPinguinera.Quotes.Application.DTOs.CalculateQuote;
 
 public class CalculateGroupResDTO
 {

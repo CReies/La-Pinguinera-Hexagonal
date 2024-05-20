@@ -15,4 +15,8 @@
     <ProjectReference Include="..\LaPinguinera.Quotes.Infrastructure.Persistence\LaPinguinera.Quotes.Infrastructure.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\Quote\" />
+  </ItemGroup>
+
 </Project>

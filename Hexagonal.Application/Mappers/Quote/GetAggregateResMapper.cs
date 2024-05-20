@@ -1,7 +1,7 @@
-﻿using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs.Quote;
 using LaPinguinera.Quotes.Domain.Generic;
 
-namespace LaPinguinera.Quotes.Application.Mappers;
+namespace LaPinguinera.Quotes.Application.Mappers.Quote;
 
 public class GetAggregateResMapper
 {

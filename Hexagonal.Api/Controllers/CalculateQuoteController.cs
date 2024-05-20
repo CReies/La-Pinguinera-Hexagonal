@@ -1,8 +1,8 @@
-﻿using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs.CalculateQuote;
 using LaPinguinera.Quotes.Application.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
-using LaPinguinera.Quotes.Infrastructure.Api.DTOs;
+using LaPinguinera.Quotes.Infrastructure.Api.DTOs.CalculateQuote;
 using Microsoft.AspNetCore.Mvc;
 using System.Reactive.Linq;
 

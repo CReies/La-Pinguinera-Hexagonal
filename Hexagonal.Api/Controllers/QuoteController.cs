@@ -1,4 +1,4 @@
-﻿using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs.Quote;
 using LaPinguinera.Quotes.Application.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using Microsoft.AspNetCore.Mvc;

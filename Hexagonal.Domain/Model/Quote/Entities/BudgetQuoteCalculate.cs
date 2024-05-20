@@ -1,11 +1,8 @@
 ﻿using LaPinguinera.Quotes.Domain.Generic;
-using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
 using LaPinguinera.Quotes.Domain.Model.Quote.Shared;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.BudgetQuoteCalculate;
-using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
-using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Entities;
@@ -40,7 +37,7 @@ public class BudgetQuoteCalculate : Entity<BudgetQuoteCalculateId>
 		AbstractBook expensiveBook = cheapBook.SellPrice.Value > cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
 		AbstractBook cheapestBook = cheapBook.SellPrice.Value < cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
 
-		var (result, restOfBudget) = SetMaxBooksAndRemainingBudget( cheapBook.Clone(), expensiveBook.Clone(), seniority, budget );
+		(IResult result, decimal restOfBudget) = SetMaxBooksAndRemainingBudget( cheapBook.Clone(), expensiveBook.Clone(), seniority, budget );
 
 		return (result, requestedBooks, restOfBudget);
 	}

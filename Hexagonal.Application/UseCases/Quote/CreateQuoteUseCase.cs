@@ -1,12 +1,11 @@
-﻿using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs.Quote;
 using LaPinguinera.Quotes.Application.Generic;
-using LaPinguinera.Quotes.Application.Mappers;
+using LaPinguinera.Quotes.Application.Mappers.Quote;
 using LaPinguinera.Quotes.Domain.Generic;
-using LaPinguinera.Quotes.Domain.Model.Quote;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using System.Reactive.Linq;
 
-namespace LaPinguinera.Quotes.Application.UseCases;
+namespace LaPinguinera.Quotes.Application.UseCases.Quote;
 
 public class CreateQuoteUseCase( IEventsRepository eventsRepository ) : IInitialCommandUseCase<CreateQuoteCommand, CreateQuoteResDTO>
 {

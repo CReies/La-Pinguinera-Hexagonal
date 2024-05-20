@@ -1,10 +1,8 @@
 ﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
-using LaPinguinera.Quotes.Domain.Model.Quote.Factory;
 using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
 using LaPinguinera.Quotes.Domain.Model.Quote.Shared;
-using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 
@@ -66,7 +64,7 @@ public class QuoteBehavior : Behavior
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			_ = quote.Customer.CalculateSeniority();
 
-			var (result, requestedBook) = quote.GroupQuoteCalculate.CalculateList( domainEvent.BooksRequested, quote.Customer.Seniority.Value, quote.Inventory );
+			(IResult result, List<List<AbstractBook>> requestedBook) = quote.GroupQuoteCalculate.CalculateList( domainEvent.BooksRequested, quote.Customer.Seniority.Value, quote.Inventory );
 
 			quote.Result = result;
 			quote.RequestedBooks = requestedBook;
@@ -85,7 +83,7 @@ public class QuoteBehavior : Behavior
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			_ = quote.Customer.CalculateSeniority();
 
-			var (result, requestedBooks, restBudget) = quote.BudgetQuoteCalculate.Calculate( quote.Inventory, domainEvent.BookIds, quote.Customer.Seniority.Value, domainEvent.Budget );
+			(IResult result, List<List<AbstractBook>> requestedBooks, decimal restBudget) = quote.BudgetQuoteCalculate.Calculate( quote.Inventory, domainEvent.BookIds, quote.Customer.Seniority.Value, domainEvent.Budget );
 
 			quote.Result = result;
 			quote.RequestedBooks = requestedBooks;
@@ -105,7 +103,7 @@ public class QuoteBehavior : Behavior
 			quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			_ = quote.Customer.CalculateSeniority();
 
-			var (result, requestedBooks) = quote.GroupQuoteCalculate.CalculateGroups( domainEvent.GroupsRequested, quote.Customer.Seniority.Value, quote.Inventory );
+			(IResult result, List<List<AbstractBook>> requestedBooks) = quote.GroupQuoteCalculate.CalculateGroups( domainEvent.GroupsRequested, quote.Customer.Seniority.Value, quote.Inventory );
 
 			quote.Result = result;
 			quote.RequestedBooks = requestedBooks;

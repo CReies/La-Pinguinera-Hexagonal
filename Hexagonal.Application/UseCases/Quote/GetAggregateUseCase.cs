@@ -1,11 +1,11 @@
-﻿using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs.Quote;
 using LaPinguinera.Quotes.Application.Generic;
-using LaPinguinera.Quotes.Application.Mappers;
+using LaPinguinera.Quotes.Application.Mappers.Quote;
 using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events.Enums;
 using System.Reactive.Linq;
 
-namespace LaPinguinera.Quotes.Application.UseCases;
+namespace LaPinguinera.Quotes.Application.UseCases.Quote;
 
 public class GetAggregateUseCase( IEventsRepository eventsRepository ) : IGetUseCase<GetAggregateResDTO>
 {
@@ -19,7 +19,7 @@ public class GetAggregateUseCase( IEventsRepository eventsRepository ) : IGetUse
 			.FromAsync( () => _repository.FindAggregateByEventType( EventType.QuoteCreated.ToString() ) )
 			.Select( events =>
 			{
-				var domainEvent = events.FirstOrDefault() ?? throw new KeyNotFoundException( "Aggregate not created" );
+				DomainEvent domainEvent = events.FirstOrDefault() ?? throw new KeyNotFoundException( "Aggregate not created" );
 				return mapper.Map( domainEvent );
 			} );
 	}

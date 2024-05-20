@@ -23,9 +23,9 @@ namespace LaPinguinera.Quotes.Infrastructure.Persistence
 
 		public async Task<List<DomainEvent>> FindAggregateByEventType( string type )
 		{
-			var cursor = _eventRepository.FindAsync( ( eve )
+			IAsyncCursor<Event> cursor = _eventRepository.FindAsync( ( eve )
 					=> eve.Type.Equals( type ) ).Result;
-			var events = await cursor.ToListAsync();
+			List<Event> events = await cursor.ToListAsync();
 			return events.Select( e => Event.DeserializeEvent( e.EventBody ) ).ToList();
 		}
 

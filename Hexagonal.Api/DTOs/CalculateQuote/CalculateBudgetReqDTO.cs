@@ -1,4 +1,4 @@
-﻿namespace LaPinguinera.Quotes.Infrastructure.Api.DTOs;
+﻿namespace LaPinguinera.Quotes.Infrastructure.Api.DTOs.CalculateQuote;
 
 public class CalculateBudgetReqDTO
 {

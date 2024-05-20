@@ -1,8 +1,6 @@
 ﻿using LaPinguinera.Quotes.Domain.Generic;
-using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
 using LaPinguinera.Quotes.Domain.Model.Quote.Shared;
-using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.GroupQuoteCalculate;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
 
@@ -43,7 +41,7 @@ public class GroupQuoteCalculate : Entity<GroupQuoteCalculateId>
 		List<List<AbstractBook>> requestedBooks = [];
 		for (int i = 0; i < booksRequested.Count; i++)
 		{
-			var group = booksRequested[i];
+			List<(string bookId, int quantity)> group = booksRequested[i];
 			for (int j = 0; j < group.Count; j++)
 			{
 				(string bookId, int bookQuantity) = group[j];
@@ -59,7 +57,7 @@ public class GroupQuoteCalculate : Entity<GroupQuoteCalculateId>
 				}
 			}
 
-			var groupResult = CalculatePrices( requestedBooks, seniority );
+			IResult groupResult = CalculatePrices( requestedBooks, seniority );
 
 			if (result.Quotes.Count < i + 1) result.Quotes.Add( new GroupQuote() );
 

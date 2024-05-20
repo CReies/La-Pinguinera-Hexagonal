@@ -1,7 +1,7 @@
-﻿using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs.CalculateQuote;
 using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
 
-namespace LaPinguinera.Quotes.Application.Mappers;
+namespace LaPinguinera.Quotes.Application.Mappers.CalculateQuote;
 
 public class CalculateBudgetResMapper
 {

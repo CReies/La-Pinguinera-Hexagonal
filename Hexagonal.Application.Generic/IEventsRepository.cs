@@ -6,4 +6,5 @@ public interface IEventsRepository
 {
 	Task<List<DomainEvent>> Save( DomainEvent domainEvent );
 	Task<List<DomainEvent>> FindByAggregateId( string aggregateId );
+	Task<List<DomainEvent>> FindAggregateByEventType( string type );
 }

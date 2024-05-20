@@ -23,7 +23,7 @@ public class CalculateBudgetUseCase( IEventsRepository repository )
 				.SelectMany(
 				events =>
 				{
-					Quote quote = Quote.From( command.AggregateId.Value, events );
+					Domain.Model.Quote.Quote quote = Domain.Model.Quote.Quote.From( command.AggregateId.Value, events );
 					quote.CalculateBudget( command.BookIds, command.Budget, command.CustomerRegisterDate );
 
 					List<DomainEvent> domainEvents = quote.GetUncommittedChanges();

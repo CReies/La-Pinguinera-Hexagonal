@@ -22,7 +22,7 @@ public class GetBooksUseCase( IEventsRepository eventsRepository ) : ICommandUse
 				.SelectMany(
 				events =>
 				{
-					Quote quote = Quote.From( command.AggregateId.Value, events );
+					Domain.Model.Quote.Quote quote = Domain.Model.Quote.Quote.From( command.AggregateId.Value, events );
 
 					List<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();
 					GetBooksResMapper mapper = new();

@@ -23,7 +23,7 @@ public class CalculateListUseCase( IEventsRepository repository )
 			.SelectMany(
 			events =>
 			{
-				Quote quote = Quote.From( command.AggregateId.Value, events );
+				Domain.Model.Quote.Quote quote = Domain.Model.Quote.Quote.From( command.AggregateId.Value, events );
 				quote.CalculateList( command.Books, command.CustomerRegisterDate );
 
 				List<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();

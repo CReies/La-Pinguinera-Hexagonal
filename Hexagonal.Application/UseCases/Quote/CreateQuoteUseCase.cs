@@ -13,7 +13,7 @@ public class CreateQuoteUseCase( IEventsRepository eventsRepository ) : IInitial
 
 	public IObservable<CreateQuoteResDTO> Execute( IObservable<CreateQuoteCommand> command )
 	{
-		Quote quote = new();
+		Domain.Model.Quote.Quote quote = new();
 		IObservable<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToObservable();
 
 		CreateQuoteResMapper mapper = new();

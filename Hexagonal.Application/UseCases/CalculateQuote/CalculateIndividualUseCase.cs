@@ -23,7 +23,7 @@ public class CalculateIndividualUseCase( IEventsRepository repository )
 			.SelectMany(
 			events =>
 				{
-					Quote quote = Quote.From( command.AggregateId.Value, events );
+					Domain.Model.Quote.Quote quote = Domain.Model.Quote.Quote.From( command.AggregateId.Value, events );
 					quote.CalculateIndividual( command.Title, command.Author, command.Price, command.Type );
 
 					List<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();

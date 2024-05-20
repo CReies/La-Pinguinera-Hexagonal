@@ -15,6 +15,7 @@ public abstract class AbstractBook : Entity<BookId>
 	public SellPrice SellPrice { get; protected set; }
 	public FinalPrice? FinalPrice { get; protected set; }
 	public Discount? Discount { get; protected set; }
+	public Increase? Increase { get; protected set; }
 
 	protected AbstractBook( BookId id, Data data, BaseIncrease baseIncrease, BasePrice basePrice ) : base( id )
 	{
@@ -30,7 +31,12 @@ public abstract class AbstractBook : Entity<BookId>
 	public void CalculateSellPrice()
 	{
 		decimal sellPrice = BasePrice.Value * (1 + BaseIncrease.Value);
+		decimal increase = sellPrice - BasePrice.Value;
+		decimal discount = 0;
+
 		SellPrice = SellPrice.Of( sellPrice );
+		Increase = Increase.Of( increase );
+		Discount = Discount.Of( discount );
 	}
 
 	public void ApplyDiscount( CustomerSeniorityEnum customerSeniority )
@@ -46,11 +52,13 @@ public abstract class AbstractBook : Entity<BookId>
 		if (WholeSaleDiscount is null) ChangeWholeSaleDiscount( 0 );
 
 		decimal seniorDiscount = seniorityDiscounts[customerSeniority];
-		decimal finalPrice = SellPrice.Value * (1 + RetailIncrease!.Value) * (1 - WholeSaleDiscount!.Value) * (1 - seniorDiscount);
-		decimal discount = Math.Max( 0, SellPrice.Value - finalPrice );
+		decimal priceWithIncrease = SellPrice.Value * (1 + RetailIncrease!.Value);
+		Increase = Increase.Of( priceWithIncrease - SellPrice.Value );
+
+		decimal finalPrice = priceWithIncrease * (1 - WholeSaleDiscount!.Value) * (1 - seniorDiscount);
+		Discount = Discount.Of( priceWithIncrease - finalPrice );
 
 		FinalPrice = FinalPrice.Of( finalPrice );
-		Discount = Discount.Of( discount );
 	}
 
 	public abstract AbstractBook Clone();

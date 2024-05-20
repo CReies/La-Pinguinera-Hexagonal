@@ -97,14 +97,19 @@ public class GroupQuoteCalculate : Entity<GroupQuoteCalculateId>
 				result.Quotes[i].Books.Add( book.Clone() );
 			}
 			decimal totalPrice = result.Quotes[i].Books.Sum( book => book.FinalPrice!.Value );
-			decimal totalSellPrice = result.Quotes[i].Books.Sum( book => book.SellPrice.Value );
-			decimal totalDiscount = totalSellPrice - totalPrice;
+			decimal totalDiscount = result.Quotes[i].Books.Sum( book => book.Discount!.Value );
+			decimal totalIncrease = result.Quotes[i].Books.Sum( book => book.Increase!.Value );
+			decimal totalBasePrice = result.Quotes[i].Books.Sum( book => book.SellPrice!.Value );
 
 			result.Quotes[i].TotalPrice = totalPrice;
+			result.Quotes[i].TotalBasePrice = totalBasePrice;
 			result.Quotes[i].TotalDiscount = Math.Max( totalDiscount, 0 );
+			result.Quotes[i].TotalIncrease = Math.Max( totalIncrease, 0 );
 		}
 		result.TotalPrice = result.Quotes.Sum( quote => quote.TotalPrice );
+		result.TotalBasePrice = result.Quotes.Sum( quote => quote.TotalBasePrice );
 		result.TotalDiscount = result.Quotes.Sum( quote => quote.TotalDiscount );
+		result.TotalIncrease = result.Quotes.Sum( quote => quote.TotalIncrease );
 
 		return result;
 	}

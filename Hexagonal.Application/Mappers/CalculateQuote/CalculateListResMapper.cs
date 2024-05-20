@@ -14,12 +14,16 @@ public class CalculateListResMapper
 				Id = book.Id.Value,
 				Title = book.Data.Value.Title,
 				Author = book.Data.Value.Author,
-				Price = book.FinalPrice!.Value,
 				Type = book.Data.Value.Type,
+				BasePrice = book.SellPrice!.Value,
 				Discount = book.Discount!.Value,
+				Increase = book.Increase!.Value,
+				FinalPrice = book.FinalPrice!.Value,
 			} ).ToList(),
-			TotalPrice = result.Quotes[0].TotalPrice,
+			TotalBasePrice = result.Quotes[0].TotalBasePrice,
 			TotalDiscount = result.Quotes[0].TotalDiscount,
+			TotalIncrease = result.Quotes[0].TotalIncrease,
+			TotalPrice = result.Quotes[0].TotalPrice,
 		};
 	}
 }

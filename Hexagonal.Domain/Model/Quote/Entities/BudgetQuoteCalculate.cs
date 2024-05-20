@@ -67,11 +67,14 @@ public class BudgetQuoteCalculate : Entity<BudgetQuoteCalculateId>
 		if (quantity <= 10) throw new ArgumentException( "You don't have enough budget for a major sale" );
 
 		result.Quotes[0].TotalPrice = totalBudget - restOfBudget;
-		decimal totalSellPrice = result.Quotes[0].Books.Sum( book => book.SellPrice.Value );
-		decimal totalDiscount = totalSellPrice - result.Quotes[0].TotalPrice;
 
-		result.Quotes[0].TotalDiscount = totalDiscount;
+		decimal totalBasePrice = result.Quotes[0].Books.Sum( book => book.SellPrice!.Value );
+		decimal totalDiscount = result.Quotes[0].Books.Sum( book => book.Discount!.Value );
+		decimal totalIncrease = result.Quotes[0].Books.Sum( book => book.Increase!.Value );
+
+		result.Quotes[0].TotalBasePrice = totalBasePrice;
 		result.Quotes[0].TotalDiscount = Math.Max( totalDiscount, 0 );
+		result.Quotes[0].TotalIncrease = Math.Max( totalIncrease, 0 );
 
 		return (result, restOfBudget);
 	}

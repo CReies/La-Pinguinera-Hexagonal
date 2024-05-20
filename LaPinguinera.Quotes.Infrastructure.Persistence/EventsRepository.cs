@@ -21,6 +21,14 @@ namespace LaPinguinera.Quotes.Infrastructure.Persistence
 			return events.Select( e => Event.DeserializeEvent( e.EventBody ) ).ToList();
 		}
 
+		public async Task<List<DomainEvent>> FindAggregateByEventType( string type )
+		{
+			var cursor = _eventRepository.FindAsync( ( eve )
+					=> eve.Type.Equals( type ) ).Result;
+			var events = await cursor.ToListAsync();
+			return events.Select( e => Event.DeserializeEvent( e.EventBody ) ).ToList();
+		}
+
 		public async Task<List<DomainEvent>> Save( DomainEvent domainEvent )
 		{
 			Event @event = new()

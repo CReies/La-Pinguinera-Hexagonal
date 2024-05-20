@@ -1,9 +1,8 @@
-﻿using LaPinguinera.Application.Generic;
-using LaPinguinera.Domain.Generic;
-using LaPinguinera.Infrastructure.Persistence;
+﻿using LaPinguinera.Quotes.Application.Generic;
+using LaPinguinera.Quotes.Domain.Generic;
 using MongoDB.Driver;
 
-namespace Hexagonal.Library.Quotes.Infrastructure.Persistence
+namespace LaPinguinera.Quotes.Infrastructure.Persistence
 {
 	public class EventsRepository : IEventsRepository
 	{

@@ -1,4 +1,4 @@
-﻿namespace LaPinguinera.Domain.Generic;
+﻿namespace LaPinguinera.Quotes.Domain.Generic;
 
 public abstract class Entity<I>( I identity ) where I : Identity
 {

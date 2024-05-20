@@ -1,4 +1,4 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
 

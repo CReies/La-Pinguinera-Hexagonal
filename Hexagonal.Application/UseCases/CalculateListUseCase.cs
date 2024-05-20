@@ -1,6 +1,7 @@
-﻿using LaPinguinera.Application.Generic;
-using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs;
+using LaPinguinera.Quotes.Application.Generic;
 using LaPinguinera.Quotes.Application.Mappers;
+using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
@@ -26,7 +27,7 @@ public class CalculateListUseCase( IEventsRepository repository )
 				Quote quote = Quote.From( command.AggregateId.Value, events );
 				quote.CalculateList( command.Books, command.CustomerRegisterDate );
 
-				List<LaPinguinera.Domain.Generic.DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();
+				List<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();
 				CalculateListResMapper mapper = new();
 
 				return domainEvents.ToObservable()

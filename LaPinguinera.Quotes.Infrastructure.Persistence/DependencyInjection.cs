@@ -1,11 +1,10 @@
-﻿using Hexagonal.Library.Quotes.Infrastructure.Persistence;
-using LaPinguinera.Application.Generic;
+﻿using LaPinguinera.Quotes.Application.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
 
-namespace LaPinguinera.Infrastructure.Persistence;
+namespace LaPinguinera.Quotes.Infrastructure.Persistence;
 
 public static class DependencyInjection
 {

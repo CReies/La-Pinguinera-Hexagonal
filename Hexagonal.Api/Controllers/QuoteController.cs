@@ -1,5 +1,5 @@
-﻿using LaPinguinera.Application.Generic;
-using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs;
+using LaPinguinera.Quotes.Application.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 using LaPinguinera.Quotes.Infrastructure.Api.DTOs;

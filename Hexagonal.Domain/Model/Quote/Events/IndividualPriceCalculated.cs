@@ -1,4 +1,4 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events.Enums;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 using System.Text.Json.Serialization;

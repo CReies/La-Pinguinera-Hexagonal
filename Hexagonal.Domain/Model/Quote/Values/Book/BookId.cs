@@ -1,4 +1,4 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Values.Book;
 

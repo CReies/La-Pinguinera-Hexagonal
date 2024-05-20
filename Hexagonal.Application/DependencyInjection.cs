@@ -1,11 +1,11 @@
-﻿using LaPinguinera.Application.Generic;
-using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs;
+using LaPinguinera.Quotes.Application.Generic;
 using LaPinguinera.Quotes.Application.UseCases;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace LaPinguinera.Application;
+namespace LaPinguinera.Quotes.Application;
 
 public static class DependencyInjection
 {

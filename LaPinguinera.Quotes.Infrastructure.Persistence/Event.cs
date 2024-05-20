@@ -1,9 +1,9 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System.Text.Json;
 
-namespace LaPinguinera.Infrastructure.Persistence;
+namespace LaPinguinera.Quotes.Infrastructure.Persistence;
 
 public class Event
 {

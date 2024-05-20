@@ -1,7 +1,7 @@
-﻿using LaPinguinera.Application.Generic;
-using LaPinguinera.Domain.Generic;
-using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs;
+using LaPinguinera.Quotes.Application.Generic;
 using LaPinguinera.Quotes.Application.Mappers;
+using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;

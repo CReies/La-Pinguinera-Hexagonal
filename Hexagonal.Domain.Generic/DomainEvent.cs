@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LaPinguinera.Domain.Generic;
+namespace LaPinguinera.Quotes.Domain.Generic;
 
 public abstract class DomainEvent
 {

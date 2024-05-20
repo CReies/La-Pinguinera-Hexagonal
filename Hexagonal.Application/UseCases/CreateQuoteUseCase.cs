@@ -1,6 +1,7 @@
-﻿using LaPinguinera.Application.Generic;
-using LaPinguinera.Quotes.Application.DTOs;
+﻿using LaPinguinera.Quotes.Application.DTOs;
+using LaPinguinera.Quotes.Application.Generic;
 using LaPinguinera.Quotes.Application.Mappers;
+using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using System.Reactive.Linq;
@@ -14,7 +15,7 @@ public class CreateQuoteUseCase( IEventsRepository eventsRepository ) : IInitial
 	public IObservable<CreateQuoteResDTO> Execute( IObservable<CreateQuoteCommand> command )
 	{
 		Quote quote = new();
-		IObservable<LaPinguinera.Domain.Generic.DomainEvent> domainEvents = quote.GetUncommittedChanges().ToObservable();
+		IObservable<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToObservable();
 
 		CreateQuoteResMapper mapper = new();
 

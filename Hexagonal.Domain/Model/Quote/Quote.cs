@@ -1,4 +1,4 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;

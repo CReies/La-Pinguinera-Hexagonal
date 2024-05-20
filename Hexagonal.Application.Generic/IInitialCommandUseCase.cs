@@ -1,4 +1,6 @@
-﻿namespace LaPinguinera.Application.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
+
+namespace LaPinguinera.Quotes.Application.Generic;
 
 public interface IInitialCommandUseCase<T, I> where T : InitialCommand
 {

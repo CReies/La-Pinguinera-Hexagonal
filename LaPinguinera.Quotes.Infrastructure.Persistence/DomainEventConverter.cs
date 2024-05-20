@@ -1,9 +1,9 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace LaPinguinera.Infrastructure.Persistence;
+namespace LaPinguinera.Quotes.Infrastructure.Persistence;
 
 public class DomainEventConverter : JsonConverter<DomainEvent>
 {

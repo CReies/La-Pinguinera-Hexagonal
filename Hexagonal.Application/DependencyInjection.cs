@@ -16,6 +16,7 @@ public static class DependencyInjection
 		_ = services.AddTransient<ICommandUseCase<CalculateListCommand, QuoteId, CalculateListResDTO>, CalculateListUseCase>();
 		_ = services.AddTransient<ICommandUseCase<CalculateBudgetCommand, QuoteId, CalculateBudgetResDTO>, CalculateBudgetUseCase>();
 		_ = services.AddTransient<ICommandUseCase<CalculateGroupCommand, QuoteId, CalculateGroupResDTO>, CalculateGroupUseCase>();
+		_ = services.AddTransient<IGetAggregateUseCase<GetAggregateResDTO>, GetAggregateUseCase>();
 
 		return services;
 	}

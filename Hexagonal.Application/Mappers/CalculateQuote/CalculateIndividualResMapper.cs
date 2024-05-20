@@ -1,22 +1,22 @@
 ﻿using LaPinguinera.Quotes.Application.DTOs.CalculateQuote;
-using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
+using LaPinguinera.Quotes.Domain.Model.Quote.Values.CreationQuoteCalculate;
 
 namespace LaPinguinera.Quotes.Application.Mappers.CalculateQuote;
 
 public class CalculateIndividualMapper
 {
-	public CalculateIndividualResDTO Map( IResult result )
+	public CalculateIndividualResDTO Map( Result result )
 	{
 		return new CalculateIndividualResDTO
 		{
-			Id = result.Quotes[0].Books[0].Id.Value,
-			Title = result.Quotes[0].Books[0].Data.Value.Title,
-			Author = result.Quotes[0].Books[0].Data.Value.Author,
-			Type = result.Quotes[0].Books[0].Data.Value.Type,
-			BasePrice = result.Quotes[0].Books[0].BasePrice.Value,
-			Discount = result.Quotes[0].Books[0].Discount!.Value,
-			Increase = result.Quotes[0].Books[0].Increase!.Value,
-			FinalPrice = result.Quotes[0].Books[0].SellPrice.Value,
+			Id = result.Value.Id,
+			Title = result.Value.Title,
+			Author = result.Value.Author,
+			Type = result.Value.Type,
+			BasePrice = result.Value.BasePrice,
+			Discount = result.Value.Discount,
+			Increase = result.Value.Increase!,
+			FinalPrice = result.Value.FinalPrice,
 		};
 	}
 }

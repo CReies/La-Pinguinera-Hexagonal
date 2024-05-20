@@ -39,14 +39,9 @@ public class QuoteBehavior : Behavior
 			if (@event is not IndividualPriceCalculated) return;
 			IndividualPriceCalculated domainEvent = (IndividualPriceCalculated)@event;
 
-			ClearResult( quote );
-
 			AbstractBook book = quote.CreationQuoteCalculate
 				.Calculate( domainEvent.BookId!, domainEvent.Title!, domainEvent.Author!, domainEvent.BasePrice, domainEvent.BookType );
 
-			quote.Result.Quotes[0].Books.Add( book );
-
-			//quote.Customer = Customer.From( RegisterDate.Of( domainEvent.CustomerRegisterDate ) );
 			quote.Inventory.Add( book );
 			domainEvent.BookId = book.Id.Value;
 		} );

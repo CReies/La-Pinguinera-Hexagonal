@@ -26,7 +26,7 @@ public class BookFactory
 			};
 		}
 
-		var book = bookChildren[type];
+		AbstractBook book = bookChildren[type];
 
 		return book ?? throw new ArgumentException( "Book type not found" );
 	}

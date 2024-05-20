@@ -4,20 +4,20 @@ namespace LaPinguinera.Quotes.Domain.Model.Quote.Values.Book;
 
 public class BasePrice : IValueObject<decimal>
 {
-    public decimal Value { get; private set; }
+	public decimal Value { get; private set; }
 
-    private BasePrice(decimal value)
-    {
-        if (value <= 0)
-        {
-            throw new ArgumentException("Base price cannot be less than or equal to zero");
-        }
+	private BasePrice( decimal value )
+	{
+		if (value <= 0)
+		{
+			throw new ArgumentException( "Base price cannot be less than or equal to zero" );
+		}
 
-        Value = value;
-    }
+		Value = value;
+	}
 
-    public static BasePrice Of(decimal value)
-    {
-        return new BasePrice(value);
-    }
+	public static BasePrice Of( decimal value )
+	{
+		return new BasePrice( value );
+	}
 }

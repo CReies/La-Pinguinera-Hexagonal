@@ -19,9 +19,9 @@ public class CreateQuoteController : ControllerBase
 	{
 		try
 		{
-			var subject = Observable.Return( command );
-			var resultObservable = useCaseCommand.Execute( subject );
-			var result = await resultObservable.FirstAsync();
+			IObservable<CreateQuoteCommand> subject = Observable.Return( command );
+			IObservable<CreateQuoteResDTO> resultObservable = useCaseCommand.Execute( subject );
+			CreateQuoteResDTO result = await resultObservable.FirstAsync();
 
 			return Ok( result );
 		}

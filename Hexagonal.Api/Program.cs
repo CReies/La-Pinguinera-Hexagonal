@@ -1,7 +1,7 @@
 using LaPinguinera.Application;
 using LaPinguinera.Infrastructure.Persistence;
 
-var builder = WebApplication.CreateBuilder( args );
+WebApplicationBuilder builder = WebApplication.CreateBuilder( args );
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -9,12 +9,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddPersistence( builder.Configuration );
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+	_ = app.UseSwagger();
+	_ = app.UseSwaggerUI();
 }
 
 app.UseAuthorization();

@@ -24,10 +24,10 @@ public class CalculateIndividualUseCase( IEventsRepository repository )
 			.SelectMany(
 			events =>
 				{
-					var quote = Quote.From( command.AggregateId.Value, events );
+					Quote quote = Quote.From( command.AggregateId.Value, events );
 					quote.CalculateIndividual( command.Title, command.Author, command.Price, command.Type );
 
-					var domainEvents = quote.GetUncommittedChanges().ToList();
+					List<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();
 					CalculateIndividualMapper mapper = new();
 
 					return domainEvents.ToObservable()

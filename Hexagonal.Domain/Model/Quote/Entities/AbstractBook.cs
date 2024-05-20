@@ -29,13 +29,13 @@ public abstract class AbstractBook : Entity<BookId>
 
 	public void CalculateSellPrice()
 	{
-		var sellPrice = BasePrice.Value * (1 + BaseIncrease.Value);
+		decimal sellPrice = BasePrice.Value * (1 + BaseIncrease.Value);
 		SellPrice = SellPrice.Of( sellPrice );
 	}
 
 	public void ApplyDiscount( CustomerSeniorityEnum customerSeniority )
 	{
-		var seniorityDiscounts = new Dictionary<CustomerSeniorityEnum, decimal>
+		Dictionary<CustomerSeniorityEnum, decimal> seniorityDiscounts = new()
 		{
 			{ CustomerSeniorityEnum.LessOneYear, 0 },
 			{ CustomerSeniorityEnum.OneToTwoYears, 0.12m },
@@ -45,9 +45,9 @@ public abstract class AbstractBook : Entity<BookId>
 		if (RetailIncrease is null) ChangeRetailIncrease( 0 );
 		if (WholeSaleDiscount is null) ChangeWholeSaleDiscount( 0 );
 
-		var seniorDiscount = seniorityDiscounts[customerSeniority];
-		var finalPrice = SellPrice.Value * (1 + RetailIncrease!.Value) * (1 - WholeSaleDiscount!.Value) * (1 - seniorDiscount);
-		var discount = Math.Max( 0, SellPrice.Value - finalPrice );
+		decimal seniorDiscount = seniorityDiscounts[customerSeniority];
+		decimal finalPrice = SellPrice.Value * (1 + RetailIncrease!.Value) * (1 - WholeSaleDiscount!.Value) * (1 - seniorDiscount);
+		decimal discount = Math.Max( 0, SellPrice.Value - finalPrice );
 
 		FinalPrice = FinalPrice.Of( finalPrice );
 		Discount = Discount.Of( discount );

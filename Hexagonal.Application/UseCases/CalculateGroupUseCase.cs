@@ -23,10 +23,10 @@ public class CalculateGroupUseCase( IEventsRepository repository )
 			.SelectMany(
 			events =>
 			{
-				var quote = Quote.From( command.AggregateId.Value, events );
+				Quote quote = Quote.From( command.AggregateId.Value, events );
 				quote.CalculateGroup( command.BookGroups, command.CustomerRegisterDate );
 
-				var domainEvents = quote.GetUncommittedChanges().ToList();
+				List<LaPinguinera.Domain.Generic.DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();
 				CalculateGroupResMapper mapper = new();
 
 				return domainEvents.ToObservable()

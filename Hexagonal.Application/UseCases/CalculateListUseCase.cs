@@ -23,10 +23,10 @@ public class CalculateListUseCase( IEventsRepository repository )
 			.SelectMany(
 			events =>
 			{
-				var quote = Quote.From( command.AggregateId.Value, events );
+				Quote quote = Quote.From( command.AggregateId.Value, events );
 				quote.CalculateList( command.Books, command.CustomerRegisterDate );
 
-				var domainEvents = quote.GetUncommittedChanges().ToList();
+				List<LaPinguinera.Domain.Generic.DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();
 				CalculateListResMapper mapper = new();
 
 				return domainEvents.ToObservable()

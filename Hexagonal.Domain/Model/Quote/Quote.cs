@@ -28,7 +28,7 @@ public class Quote : AggregateRoot<QuoteId>
 
 	public static Quote From( string quoteId, List<DomainEvent> events )
 	{
-		var quote = new Quote( QuoteId.Of( quoteId ) );
+		Quote quote = new( QuoteId.Of( quoteId ) );
 		events.ForEach( quote.Apply );
 
 		return quote;

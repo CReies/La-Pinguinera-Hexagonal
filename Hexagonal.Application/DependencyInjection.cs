@@ -11,11 +11,11 @@ public static class DependencyInjection
 {
 	public static IServiceCollection AddApplication( this IServiceCollection services )
 	{
-		services.AddTransient<IInitialCommandUseCase<CreateQuoteCommand, CreateQuoteResDTO>, CreateQuoteUseCase>();
-		services.AddTransient<ICommandUseCase<CalculateIndividualCommand, QuoteId, CalculateIndividualResDTO>, CalculateIndividualUseCase>();
-		services.AddTransient<ICommandUseCase<CalculateListCommand, QuoteId, CalculateListResDTO>, CalculateListUseCase>();
-		services.AddTransient<ICommandUseCase<CalculateBudgetCommand, QuoteId, CalculateBudgetResDTO>, CalculateBudgetUseCase>();
-		services.AddTransient<ICommandUseCase<CalculateGroupCommand, QuoteId, CalculateGroupResDTO>, CalculateGroupUseCase>();
+		_ = services.AddTransient<IInitialCommandUseCase<CreateQuoteCommand, CreateQuoteResDTO>, CreateQuoteUseCase>();
+		_ = services.AddTransient<ICommandUseCase<CalculateIndividualCommand, QuoteId, CalculateIndividualResDTO>, CalculateIndividualUseCase>();
+		_ = services.AddTransient<ICommandUseCase<CalculateListCommand, QuoteId, CalculateListResDTO>, CalculateListUseCase>();
+		_ = services.AddTransient<ICommandUseCase<CalculateBudgetCommand, QuoteId, CalculateBudgetResDTO>, CalculateBudgetUseCase>();
+		_ = services.AddTransient<ICommandUseCase<CalculateGroupCommand, QuoteId, CalculateGroupResDTO>, CalculateGroupUseCase>();
 
 		return services;
 	}

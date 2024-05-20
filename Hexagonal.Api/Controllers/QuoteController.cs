@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime.Internal;
-using LaPinguinera.Application.Generic;
+﻿using LaPinguinera.Application.Generic;
 using LaPinguinera.Quotes.Application.DTOs;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
@@ -22,16 +21,16 @@ public class QuoteController : ControllerBase
 	{
 		try
 		{
-			var command = new CalculateIndividualCommand(
+			CalculateIndividualCommand command = new(
 				request.AggregateId,
 				request.Title,
 				request.Author,
 				request.Price,
 				request.Type
 			);
-			var subject = Observable.Return( command );
-			var resultObservable = useCaseCommand.Execute( subject );
-			var result = await resultObservable.FirstAsync();
+			IObservable<CalculateIndividualCommand> subject = Observable.Return( command );
+			IObservable<CalculateIndividualResDTO> resultObservable = useCaseCommand.Execute( subject );
+			CalculateIndividualResDTO result = await resultObservable.FirstAsync();
 
 			return Ok( result );
 		}
@@ -50,17 +49,17 @@ public class QuoteController : ControllerBase
 	{
 		try
 		{
-			var bookIdWithQuantity = request.Books
+			List<(string bookId, int quantity)> bookIdWithQuantity = request.Books
 				.Select( b => (bookId: b.BookId, quantity: b.Quantity) )
 				.ToList();
-			var command = new CalculateListCommand(
+			CalculateListCommand command = new(
 				request.AggregateId,
 				bookIdWithQuantity,
 				request.CustomerRegisterDate
 			);
-			var subject = Observable.Return( command );
-			var resultObservable = useCaseCommand.Execute( subject );
-			var result = await resultObservable.FirstAsync();
+			IObservable<CalculateListCommand> subject = Observable.Return( command );
+			IObservable<CalculateListResDTO> resultObservable = useCaseCommand.Execute( subject );
+			CalculateListResDTO result = await resultObservable.FirstAsync();
 
 			return Ok( result );
 		}
@@ -79,15 +78,15 @@ public class QuoteController : ControllerBase
 	{
 		try
 		{
-			var command = new CalculateBudgetCommand(
+			CalculateBudgetCommand command = new(
 				request.AggregateId,
 				request.BookIds,
 				request.Budget,
 				request.CustomerRegisterDate
 			);
-			var subject = Observable.Return( command );
-			var resultObservable = useCaseCommand.Execute( subject );
-			var result = await resultObservable.FirstAsync();
+			IObservable<CalculateBudgetCommand> subject = Observable.Return( command );
+			IObservable<CalculateBudgetResDTO> resultObservable = useCaseCommand.Execute( subject );
+			CalculateBudgetResDTO result = await resultObservable.FirstAsync();
 
 			return Ok( result );
 		}
@@ -106,19 +105,19 @@ public class QuoteController : ControllerBase
 	{
 		try
 		{
-			var bookIdWithQuantityGroup = request.Group
+			List<List<(string bookId, int quantity)>> bookIdWithQuantityGroup = request.Group
 				.Select( g => g
 					.Select( b => (bookId: b.BookId, quantity: b.Quantity) )
 					.ToList() )
 				.ToList();
-			var command = new CalculateGroupCommand(
+			CalculateGroupCommand command = new(
 				request.AggregateId,
 				bookIdWithQuantityGroup,
 				request.CustomerRegisterDate
 			);
-			var subject = Observable.Return( command );
-			var resultObservable = useCaseCommand.Execute( subject );
-			var result = await resultObservable.FirstAsync();
+			IObservable<CalculateGroupCommand> subject = Observable.Return( command );
+			IObservable<CalculateGroupResDTO> resultObservable = useCaseCommand.Execute( subject );
+			CalculateGroupResDTO result = await resultObservable.FirstAsync();
 
 			return Ok( result );
 		}

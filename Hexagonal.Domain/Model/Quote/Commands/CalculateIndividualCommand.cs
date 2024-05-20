@@ -1,6 +1,6 @@
-﻿using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
-using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
+using LaPinguinera.Quotes.Domain.Model.Quote.Values.Root;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Commands;
 

@@ -16,15 +16,15 @@ namespace Hexagonal.Library.Quotes.Infrastructure.Persistence
 
 		public async Task<List<DomainEvent>> FindByAggregateId( string aggregateId )
 		{
-			var cursor = await _eventRepository.FindAsync( ( eve )
+			IAsyncCursor<Event> cursor = await _eventRepository.FindAsync( ( eve )
 					=> eve.AggregateId.Equals( aggregateId ) );
-			var events = await cursor.ToListAsync();
+			List<Event> events = await cursor.ToListAsync();
 			return events.Select( e => Event.DeserializeEvent( e.EventBody ) ).ToList();
 		}
 
 		public async Task<List<DomainEvent>> Save( DomainEvent domainEvent )
 		{
-			var @event = new Event()
+			Event @event = new()
 			{
 				AggregateId = domainEvent.AggregateId,
 				Type = domainEvent.Type,

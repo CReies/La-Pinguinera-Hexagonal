@@ -12,14 +12,14 @@ public static class DependencyInjection
 	public static IServiceCollection AddPersistence( this IServiceCollection services, IConfiguration configuration )
 	{
 
-		services.AddScoped( ( options ) =>
+		_ = services.AddScoped( ( options ) =>
 		{
-			var client = new MongoClient( configuration["Database:ConnectionString"] );
-			var database = client.GetDatabase( configuration["Database:DatabaseName"] );
+			MongoClient client = new( configuration["Database:ConnectionString"] );
+			IMongoDatabase database = client.GetDatabase( configuration["Database:DatabaseName"] );
 			return database.GetCollection<Event>( configuration["Database:CollectionName"] );
 		} );
 
-		services.AddScoped<IEventsRepository, EventsRepository>();
+		_ = services.AddScoped<IEventsRepository, EventsRepository>();
 
 		return services;
 	}

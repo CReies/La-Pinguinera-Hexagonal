@@ -1,9 +1,9 @@
-﻿using System.Reactive.Linq;
-using LaPinguinera.Application.Generic;
+﻿using LaPinguinera.Application.Generic;
 using LaPinguinera.Quotes.Application.DTOs;
 using LaPinguinera.Quotes.Application.Mappers;
 using LaPinguinera.Quotes.Domain.Model.Quote;
 using LaPinguinera.Quotes.Domain.Model.Quote.Commands;
+using System.Reactive.Linq;
 
 namespace LaPinguinera.Quotes.Application.UseCases;
 
@@ -13,14 +13,14 @@ public class CreateQuoteUseCase( IEventsRepository eventsRepository ) : IInitial
 
 	public IObservable<CreateQuoteResDTO> Execute( IObservable<CreateQuoteCommand> command )
 	{
-		var quote = new Quote();
-		var domainEvents = quote.GetUncommittedChanges().ToObservable();
+		Quote quote = new();
+		IObservable<LaPinguinera.Domain.Generic.DomainEvent> domainEvents = quote.GetUncommittedChanges().ToObservable();
 
 		CreateQuoteResMapper mapper = new();
 
-		domainEvents.Subscribe( async domainEvent =>
+		_ = domainEvents.Subscribe( async domainEvent =>
 		{
-			await _eventsRepository.Save( domainEvent );
+			_ = await _eventsRepository.Save( domainEvent );
 		} );
 
 		quote.MarkAsCommitted();

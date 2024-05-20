@@ -23,17 +23,17 @@ public class CalculateBudgetUseCase( IEventsRepository repository )
 			.SelectMany(
 			events =>
 			{
-				var quote = Quote.From( command.AggregateId.Value, events );
+				Quote quote = Quote.From( command.AggregateId.Value, events );
 				quote.CalculateBudget( command.BookIds, command.Budget, command.CustomerRegisterDate );
 
-				var domainEvents = quote.GetUncommittedChanges();
+				List<LaPinguinera.Domain.Generic.DomainEvent> domainEvents = quote.GetUncommittedChanges();
 				CalculateBudgetResMapper mapper = new();
 
 				return domainEvents.ToObservable()
 					.SelectMany( domainEvent => _repository.Save( domainEvent ).ToObservable() )
 					.ToList()
 					.Do( _ => quote.MarkAsCommitted() )
-					.Select( _ => mapper.Map(quote.Result, quote.RestBudget!.Value) );
+					.Select( _ => mapper.Map( quote.Result, quote.RestBudget!.Value ) );
 			} )
 		);
 	}

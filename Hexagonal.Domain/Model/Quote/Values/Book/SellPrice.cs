@@ -2,7 +2,7 @@
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Values.Book;
 
-public class SellPrice: IValueObject<decimal>
+public class SellPrice : IValueObject<decimal>
 {
 	public decimal Value { get; private set; }
 	private SellPrice( decimal value )

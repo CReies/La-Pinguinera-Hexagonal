@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LaPinguinera.Infrastructure.Persistence;
 
@@ -9,21 +9,21 @@ public class DomainEventConverter : JsonConverter<DomainEvent>
 {
 	public override DomainEvent Read( ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options )
 	{
-		using (var jsonDoc = JsonDocument.ParseValue( ref reader ))
+		using (JsonDocument jsonDoc = JsonDocument.ParseValue( ref reader ))
 		{
-			var jsonObject = jsonDoc.RootElement;
+			JsonElement jsonObject = jsonDoc.RootElement;
 
-			if (jsonObject.TryGetProperty( "Type", out var typeProperty ))
+			if (jsonObject.TryGetProperty( "Type", out JsonElement typeProperty ))
 			{
-				var type = typeProperty.GetString();
-				var domainEventType = GetDomainEventType( type );
+				string? type = typeProperty.GetString();
+				Type? domainEventType = GetDomainEventType( type );
 
 				if (domainEventType == null)
 				{
 					throw new NotSupportedException( $"Event type '{type}' is not supported." );
 				}
 
-				var domainEvent = JsonSerializer.Deserialize( jsonObject.GetRawText(), domainEventType, options );
+				object? domainEvent = JsonSerializer.Deserialize( jsonObject.GetRawText(), domainEventType, options );
 				return (DomainEvent)domainEvent!;
 			}
 			else

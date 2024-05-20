@@ -14,14 +14,25 @@ public class Quote : AggregateRoot<QuoteId>
 	public List<List<AbstractBook>> RequestedBooks { get; set; }
 	public Customer? Customer { get; set; }
 	public RestBudget? RestBudget { get; set; }
+	public CreationQuoteCalculate CreationQuoteCalculate { get; set; }
+	public GroupQuoteCalculate GroupQuoteCalculate { get; set; }
+	public BudgetQuoteCalculate BudgetQuoteCalculate { get; set; }
 
 	public Quote( QuoteId id ) : base( id )
 	{
+		CreationQuoteCalculate = new();
+		GroupQuoteCalculate = new();
+		BudgetQuoteCalculate = new();
+
 		Subscribe( new QuoteBehavior( this ) );
 	}
 
 	public Quote() : base( new QuoteId() )
 	{
+		CreationQuoteCalculate = new();
+		GroupQuoteCalculate = new();
+		BudgetQuoteCalculate = new();
+
 		Subscribe( new QuoteBehavior( this ) );
 		AppendEvent( new QuoteCreated() ).Invoke();
 	}

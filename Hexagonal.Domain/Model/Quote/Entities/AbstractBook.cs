@@ -14,6 +14,7 @@ public abstract class AbstractBook : Entity<BookId>
 	public BasePrice BasePrice { get; protected set; }
 	public SellPrice SellPrice { get; protected set; }
 	public FinalPrice? FinalPrice { get; protected set; }
+	public Discount? Discount { get; protected set; }
 
 	protected AbstractBook( BookId id, Data data, BaseIncrease baseIncrease, BasePrice basePrice ) : base( id )
 	{
@@ -46,8 +47,10 @@ public abstract class AbstractBook : Entity<BookId>
 
 		var seniorDiscount = seniorityDiscounts[customerSeniority];
 		var finalPrice = SellPrice.Value * (1 + RetailIncrease!.Value) * (1 - WholeSaleDiscount!.Value) * (1 - seniorDiscount);
+		var discount = Math.Max( 0, SellPrice.Value - finalPrice );
 
 		FinalPrice = FinalPrice.Of( finalPrice );
+		Discount = Discount.Of( discount );
 	}
 
 	public abstract AbstractBook Clone();

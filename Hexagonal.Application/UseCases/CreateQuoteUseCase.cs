@@ -26,6 +26,6 @@ public class CreateQuoteUseCase( IEventsRepository eventsRepository ) : IInitial
 
 		quote.MarkAsCommitted();
 
-		return domainEvents.Select( _ => mapper.Map( quote.Id.Value ) );
+		return domainEvents.Select( mapper.Map );
 	}
 }

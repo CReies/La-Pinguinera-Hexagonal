@@ -106,13 +106,15 @@ public class QuoteBehavior : Behavior
 
 				quote.Result.Quotes[i].Books.Add( book.Clone() );
 			}
-			var totalPrice = quote.Result.Quotes[0].Books.Sum( book => book.FinalPrice!.Value );
-			var totalSellPrice = quote.Result.Quotes[0].Books.Sum( book => book.SellPrice.Value );
+			var totalPrice = quote.Result.Quotes[i].Books.Sum( book => book.FinalPrice!.Value );
+			var totalSellPrice = quote.Result.Quotes[i].Books.Sum( book => book.SellPrice.Value );
 			var totalDiscount = totalSellPrice - totalPrice;
 
-			quote.Result.Quotes[0].TotalPrice = totalPrice;
-			quote.Result.Quotes[0].TotalDiscount = Math.Max( totalDiscount, 0 );
+			quote.Result.Quotes[i].TotalPrice = totalPrice;
+			quote.Result.Quotes[i].TotalDiscount = Math.Max( totalDiscount, 0 );
 		}
+		quote.Result.TotalPrice = quote.Result.Quotes.Sum( quote => quote.TotalPrice );
+		quote.Result.TotalDiscount = quote.Result.Quotes.Sum( quote => quote.TotalDiscount );
 	}
 
 	private void AddCalculateBudgetSub( Quote quote )
@@ -173,11 +175,13 @@ public class QuoteBehavior : Behavior
 
 		if (quantity <= 10) throw new ArgumentException( "You don't have enough budget for a major sale" );
 
-
-
 		quote.RestBudget = RestBudget.Of( restOfBudget );
 		quote.Result.Quotes[0].TotalPrice = totalBudget - restOfBudget;
-		var totalDiscount = quote.Result.Quotes[0].Books.Sum( book => book.SellPrice.Value ) - quote.Result.Quotes[0].TotalPrice;
+		var totalSellPrice = quote.Result.Quotes[0].Books.Sum( book => book.SellPrice.Value );
+		var totalDiscount = totalSellPrice - quote.Result.Quotes[0].TotalPrice;
+
+		quote.Result.TotalDiscount = totalDiscount;
+		quote.Result.Quotes[0].TotalDiscount = Math.Max( totalDiscount, 0 );
 	}
 
 	private AbstractBook GetBookEntity( AbstractBook book, int quantity, CustomerSeniority seniority )

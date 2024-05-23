@@ -17,6 +17,17 @@ if (app.Environment.IsDevelopment())
 	_ = app.UseSwaggerUI();
 }
 
+builder.Services.AddCors( options =>
+{
+	options.AddPolicy( "AllowSpecificOrigin",
+	builder => builder
+		.WithOrigins( "http://localhost:5004" )
+		.AllowAnyHeader()
+		.AllowAnyMethod() );
+} );
+
+app.UseCors( "AllowAllOrigins" );
+
 app.UseAuthorization();
 
 app.MapControllers();

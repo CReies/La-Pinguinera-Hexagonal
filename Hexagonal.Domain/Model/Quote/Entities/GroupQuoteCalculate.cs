@@ -62,11 +62,17 @@ public class GroupQuoteCalculate : Entity<GroupQuoteCalculateId>
 			if (result.Quotes.Count < i + 1) result.Quotes.Add( new GroupQuote() );
 
 			result.Quotes[i] = groupResult.Quotes[0];
+			result.Quotes[i] = groupResult.Quotes[0];
+			result.Quotes[i].TotalBasePrice = groupResult.TotalBasePrice;
+			result.Quotes[i].TotalDiscount = groupResult.TotalDiscount;
+			result.Quotes[i].TotalIncrease = groupResult.TotalIncrease;
+			result.Quotes[i].TotalPrice = groupResult.TotalPrice;
 		}
-		booksRequested.ForEach( ( group ) =>
-{
 
-} );
+		result.TotalPrice = result.Quotes.Sum( quote => quote.TotalPrice );
+		result.TotalBasePrice = result.Quotes.Sum( quote => quote.TotalBasePrice );
+		result.TotalDiscount = result.Quotes.Sum( quote => quote.TotalDiscount );
+		result.TotalIncrease = result.Quotes.Sum( quote => quote.TotalIncrease );
 		return (result, requestedBooks);
 	}
 

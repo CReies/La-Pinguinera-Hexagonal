@@ -17,13 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaPinguinera.Quotes.Applica
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaPinguinera.Quotes.Application", "Hexagonal.Application\LaPinguinera.Quotes.Application.csproj", "{18F59B99-1297-4626-B789-90695F7DBA5A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaPinguinera.Quotes.Application.Test", "Hexagonal.Application.Test\LaPinguinera.Quotes.Application.Test.csproj", "{FA6677A0-D971-4A57-9EC4-794994A1230C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaPinguinera.Quotes.Infrastructure.Api", "Hexagonal.Api\LaPinguinera.Quotes.Infrastructure.Api.csproj", "{405F7015-AB92-440B-AB27-CF5A26E26C23}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaPinguinera.Quotes.Domain", "Hexagonal.Domain\LaPinguinera.Quotes.Domain.csproj", "{34233F14-A816-44EA-9EF3-156A4BA6276F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LaPinguinera.Quotes.Infrastructure.Persistence", "LaPinguinera.Quotes.Infrastructure.Persistence\LaPinguinera.Quotes.Infrastructure.Persistence.csproj", "{82762B73-A66A-42DF-99C3-4ABEA3E94B98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaPinguinera.Quotes.Infrastructure.Persistence", "LaPinguinera.Quotes.Infrastructure.Persistence\LaPinguinera.Quotes.Infrastructure.Persistence.csproj", "{82762B73-A66A-42DF-99C3-4ABEA3E94B98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +41,6 @@ Global
 		{18F59B99-1297-4626-B789-90695F7DBA5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18F59B99-1297-4626-B789-90695F7DBA5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18F59B99-1297-4626-B789-90695F7DBA5A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FA6677A0-D971-4A57-9EC4-794994A1230C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA6677A0-D971-4A57-9EC4-794994A1230C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FA6677A0-D971-4A57-9EC4-794994A1230C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FA6677A0-D971-4A57-9EC4-794994A1230C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{405F7015-AB92-440B-AB27-CF5A26E26C23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{405F7015-AB92-440B-AB27-CF5A26E26C23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{405F7015-AB92-440B-AB27-CF5A26E26C23}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -70,7 +64,6 @@ Global
 		{723FCAFF-A949-42C4-AF7B-6E972E91E903} = {0DEA441B-A895-44D2-96FC-D7BD40C67066}
 		{2C13E705-BDCF-42DE-AB97-5CC10CF5ECB0} = {256A6207-4590-4347-B2C0-C21E4628C5C2}
 		{18F59B99-1297-4626-B789-90695F7DBA5A} = {256A6207-4590-4347-B2C0-C21E4628C5C2}
-		{FA6677A0-D971-4A57-9EC4-794994A1230C} = {256A6207-4590-4347-B2C0-C21E4628C5C2}
 		{405F7015-AB92-440B-AB27-CF5A26E26C23} = {CF84C00D-46A6-42D3-8933-95AA1230A04F}
 		{34233F14-A816-44EA-9EF3-156A4BA6276F} = {0DEA441B-A895-44D2-96FC-D7BD40C67066}
 		{82762B73-A66A-42DF-99C3-4ABEA3E94B98} = {CF84C00D-46A6-42D3-8933-95AA1230A04F}

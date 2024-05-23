@@ -26,14 +26,14 @@ public class CalculateIndividualUseCase( IEventsRepository repository )
 					Domain.Model.Quote.Quote quote = Domain.Model.Quote.Quote.From( command.AggregateId.Value, events );
 					quote.CalculateIndividual( command.Title, command.Author, command.Price, command.Type );
 
-					List<DomainEvent> domainEvents = quote.GetUncommittedChanges().ToList();
+					List<DomainEvent> domainEvents = [.. quote.GetUncommittedChanges()];
 					CalculateIndividualMapper mapper = new();
 
 					return domainEvents.ToObservable()
 						.SelectMany( domainEvent => _repository.Save( domainEvent ).ToObservable() )
 						.ToList()
 						.Do( _ => quote.MarkAsCommitted() )
-						.Select( _ => mapper.Map( quote.Result ) );
+						.Select( _ => mapper.Map( quote.CreationQuoteCalculate.Result ) );
 				} )
 		);
 	}

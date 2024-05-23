@@ -1,23 +1,24 @@
 ﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
-using LaPinguinera.Quotes.Domain.Model.Quote.Shared;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Book.Enums;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.BudgetQuoteCalculate;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
+using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Helper;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 
 public class BudgetQuoteCalculate : Entity<BudgetQuoteCalculateId>
 {
+	public Result Result { get; set; }
+
 	private BudgetQuoteCalculate( BudgetQuoteCalculateId id ) : base( id )
 	{ }
 
 	public BudgetQuoteCalculate() : this( new() )
 	{ }
 
-	public (IResult result, List<List<AbstractBook>> requestedBooks, decimal restOfBudget) Calculate( List<AbstractBook> inventory, List<string> requestedBookIds, CustomerSeniorityEnum seniority, decimal budget )
+	public void Calculate( List<AbstractBook> inventory, List<string> requestedBookIds, CustomerSeniorityEnum seniority, decimal budget )
 	{
-		List<List<AbstractBook>> requestedBooks = [[]];
 		AbstractBook cheapBookFromInventory = inventory
 			.Where( book =>
 			book.Data.Value.Type == BookType.BOOK && requestedBookIds.Contains( book.Id.Value ) )
@@ -32,23 +33,19 @@ public class BudgetQuoteCalculate : Entity<BudgetQuoteCalculateId>
 		AbstractBook cheapBook = cheapBookFromInventory.Clone();
 		AbstractBook cheapNovel = cheapNovelFromInventory.Clone();
 
-		requestedBooks.Add( [cheapBook, cheapNovel] );
-
 		AbstractBook expensiveBook = cheapBook.SellPrice.Value > cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
 		AbstractBook cheapestBook = cheapBook.SellPrice.Value < cheapNovel.SellPrice.Value ? cheapBook : cheapNovel;
 
-		(IResult result, decimal restOfBudget) = SetMaxBooksAndRemainingBudget( cheapBook.Clone(), expensiveBook.Clone(), seniority, budget );
-
-		return (result, requestedBooks, restOfBudget);
+		SetMaxBooksAndRemainingBudget( cheapBook.Clone(), expensiveBook.Clone(), seniority, budget );
 	}
 
-	private (IResult result, decimal restOfBudget) SetMaxBooksAndRemainingBudget( AbstractBook cheapBook, AbstractBook expensiveBook, CustomerSeniorityEnum seniority, decimal totalBudget )
+	private void SetMaxBooksAndRemainingBudget( AbstractBook cheapBook, AbstractBook expensiveBook, CustomerSeniorityEnum seniority, decimal totalBudget )
 	{
 		decimal budget = totalBudget - expensiveBook.SellPrice.Value;
-		IResult result = new Result();
+		List<AbstractBook> books = [];
 
 		expensiveBook.ApplyDiscount( seniority );
-		result.Quotes[0].Books.Add( expensiveBook.Clone() );
+		books.Add( expensiveBook.Clone() );
 
 		decimal restOfBudget = budget;
 
@@ -61,22 +58,22 @@ public class BudgetQuoteCalculate : Entity<BudgetQuoteCalculateId>
 			if (restOfBudget < bookEntity.FinalPrice!.Value) break;
 
 			restOfBudget -= bookEntity.FinalPrice.Value;
-			result.Quotes[0].Books.Add( bookEntity.Clone() );
+			books.Add( bookEntity.Clone() );
 		}
 
 		if (quantity <= 10) throw new ArgumentException( "You don't have enough budget for a major sale" );
 
-		result.Quotes[0].TotalPrice = totalBudget - restOfBudget;
+		decimal totalPrice = totalBudget - restOfBudget;
 
-		decimal totalBasePrice = result.Quotes[0].Books.Sum( book => book.SellPrice!.Value );
-		decimal totalDiscount = result.Quotes[0].Books.Sum( book => book.Discount!.Value );
-		decimal totalIncrease = result.Quotes[0].Books.Sum( book => book.Increase!.Value );
+		decimal totalBasePrice = books.Sum( book => book.SellPrice!.Value );
+		decimal totalDiscount = Math.Max( 0, books.Sum( book => book.Discount!.Value ) );
+		decimal totalIncrease = Math.Max( 0, books.Sum( book => book.Increase!.Value ) );
+		int totalBooks = books.Count( book => book.Data.Value.Type == BookType.BOOK );
+		int totalNovels = books.Count( book => book.Data.Value.Type == BookType.NOVEL );
 
-		result.Quotes[0].TotalBasePrice = totalBasePrice;
-		result.Quotes[0].TotalDiscount = Math.Max( totalDiscount, 0 );
-		result.Quotes[0].TotalIncrease = Math.Max( totalIncrease, 0 );
+		List<BookResult> booksForResult = AbstractBookToBookResult( books );
 
-		return (result, restOfBudget);
+		Result = Result.Of( booksForResult, totalPrice, totalBasePrice, totalDiscount, totalIncrease, restOfBudget, totalBooks, totalNovels );
 	}
 
 	private static AbstractBook GetBookEntity( AbstractBook book, int quantity, CustomerSeniorityEnum seniority )
@@ -102,5 +99,19 @@ public class BudgetQuoteCalculate : Entity<BudgetQuoteCalculateId>
 		{
 			return 0;
 		}
+	}
+
+	private List<BookResult> AbstractBookToBookResult( List<AbstractBook> books )
+	{
+		return books.Select( book => new BookResult(
+			book.Id.Value,
+			book.Data.Value.Title,
+			book.Data.Value.Author,
+			book.SellPrice!.Value,
+			book.FinalPrice!.Value,
+			book.Data.Value.Type,
+			book.Discount!.Value,
+			book.Increase!.Value
+			) ).ToList();
 	}
 }

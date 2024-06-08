@@ -9,6 +9,16 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplication();
 builder.Services.AddPersistence( builder.Configuration );
 
+builder.Services.AddCors( options =>
+{
+	options.AddDefaultPolicy( builder =>
+	{
+		builder.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader();
+	} );
+} );
+
 WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -17,16 +27,7 @@ if (app.Environment.IsDevelopment())
 	_ = app.UseSwaggerUI();
 }
 
-builder.Services.AddCors( options =>
-{
-	options.AddPolicy( "AllowSpecificOrigin",
-	builder => builder
-		.WithOrigins( "http://localhost:5004" )
-		.AllowAnyHeader()
-		.AllowAnyMethod() );
-} );
-
-app.UseCors( "AllowAllOrigins" );
+app.UseCors();
 
 app.UseAuthorization();
 

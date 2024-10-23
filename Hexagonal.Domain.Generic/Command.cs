@@ -1,4 +1,4 @@
-﻿namespace LaPinguinera.Domain.Generic;
+﻿namespace LaPinguinera.Quotes.Domain.Generic;
 
 public abstract class Command<T>( T aggregateId ) where T : Identity
 {
@@ -6,5 +6,4 @@ public abstract class Command<T>( T aggregateId ) where T : Identity
 }
 
 public abstract class InitialCommand
-{
-}
+{ }

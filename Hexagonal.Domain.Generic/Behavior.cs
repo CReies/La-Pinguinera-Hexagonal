@@ -1,4 +1,4 @@
-﻿namespace LaPinguinera.Domain.Generic;
+﻿namespace LaPinguinera.Quotes.Domain.Generic;
 
 public abstract class Behavior
 {
@@ -6,6 +6,6 @@ public abstract class Behavior
 
 	protected void AddSub<T>( Action<T> sub ) where T : DomainEvent
 	{
-		Subscribers.Add( (Action<DomainEvent>)sub );
+		_ = Subscribers.Add( (Action<DomainEvent>)sub );
 	}
 }

@@ -8,12 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="System.Reactive" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Hexagonal.Application.Generic\LaPinguinera.Quotes.Application.Generic.csproj" />
     <ProjectReference Include="..\Hexagonal.Domain.Generic\LaPinguinera.Quotes.Domain.Generic.csproj" />
-    <ProjectReference Include="..\Hezagonal.Domain\Hexagonal.Domain.csproj" />
+    <ProjectReference Include="..\Hexagonal.Domain\LaPinguinera.Quotes.Domain.csproj" />
   </ItemGroup>
 
 </Project>

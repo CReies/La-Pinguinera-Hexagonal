@@ -1,4 +1,4 @@
-﻿namespace LaPinguinera.Domain.Generic;
+﻿namespace LaPinguinera.Quotes.Domain.Generic;
 
 public class ChangeEventSubscriber
 {
@@ -13,7 +13,7 @@ public class ChangeEventSubscriber
 
 	public void Apply( DomainEvent domainEvent )
 	{
-		foreach (var sub in _subscribers)
+		foreach (Action<DomainEvent> sub in _subscribers)
 		{
 			sub.Invoke( domainEvent );
 			int newVersion = FindNextVersion( domainEvent );
@@ -31,7 +31,7 @@ public class ChangeEventSubscriber
 	{
 		if (_versions.ContainsKey( domainEvent.Type ))
 		{
-			_versions.TryGetValue( domainEvent.Type, out var version );
+			_ = _versions.TryGetValue( domainEvent.Type, out int version );
 			return _versions[domainEvent.Type] = version + 1;
 		}
 

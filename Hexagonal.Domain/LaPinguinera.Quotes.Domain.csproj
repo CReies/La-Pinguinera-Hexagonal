@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Hexagonal.Domain.Generic\LaPinguinera.Quotes.Domain.Generic.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\Quote\Values\" />
-  </ItemGroup>
-
 </Project>

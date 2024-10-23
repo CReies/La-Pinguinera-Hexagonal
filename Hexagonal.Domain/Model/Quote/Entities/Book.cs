@@ -20,11 +20,13 @@ public class Book : AbstractBook
 			BasePrice.Of( basePrice )
 		);
 
-	public static Book From( string? id, string? title, string author, decimal basePrice ) => new
+	public static Book From( string? id, string? title, string? author, decimal basePrice ) => new
 		(
 			BookId.Of( id ),
 			Data.Of( title, author, BookType.BOOK ),
 			BaseIncrease.Of( 1m / 3m ),
 			BasePrice.Of( basePrice )
 		);
+
+	public override AbstractBook Clone() => (Book)MemberwiseClone();
 }

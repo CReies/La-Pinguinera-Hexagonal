@@ -1,23 +1,23 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 
 namespace LaPinguinera.Quotes.Domain.Model.Quote.Values.Book;
 
 public class FinalPrice : IValueObject<decimal>
 {
-    public decimal Value { get; private set; }
+	public decimal Value { get; private set; }
 
-    private FinalPrice(decimal value)
-    {
-        if (value < 0)
-        {
-            throw new ArgumentException("Final price cannot be less than zero");
-        }
+	private FinalPrice( decimal value )
+	{
+		if (value < 0)
+		{
+			throw new ArgumentException( "Final price cannot be less than zero" );
+		}
 
-        Value = value;
-    }
+		Value = value;
+	}
 
-    public static FinalPrice Of(decimal value)
-    {
-        return new FinalPrice(value);
-    }
+	public static FinalPrice Of( decimal value )
+	{
+		return new FinalPrice( value );
+	}
 }

@@ -1,6 +1,8 @@
-﻿namespace LaPinguinera.Application.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 
-public interface ICommandUseCase<T, I> where T : Command<I> where I : Identity
+namespace LaPinguinera.Quotes.Application.Generic;
+
+public interface ICommandUseCase<T, I, C> where T : Command<I> where I : Identity
 {
-	IObservable<List<DomainEvent>> Execute( IObservable<T> command );
+	IObservable<C> Execute( IObservable<T> command );
 }

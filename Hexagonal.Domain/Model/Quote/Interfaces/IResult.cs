@@ -2,7 +2,9 @@
 
 public interface IResult
 {
-	List<IGroupQuote> Quotes { get; }
-	decimal TotalPrice { get; }
-	decimal TotalDiscount { get; }
+	List<IGroupQuote> Quotes { get; set; }
+	decimal TotalPrice { get; set; }
+	decimal TotalBasePrice { get; set; }
+	decimal TotalDiscount { get; set; }
+	decimal TotalIncrease { get; set; }
 }

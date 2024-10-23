@@ -1,4 +1,4 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Customer;
 using LaPinguinera.Quotes.Domain.Model.Quote.Values.Shared.Enums;
 
@@ -29,11 +29,11 @@ public class Customer : Entity<CustomerId>
 
 	public CustomerSeniority CalculateSeniority()
 	{
-		var today = DateOnly.FromDateTime( DateTime.Now );
-		var totalDays = today.DayNumber - RegisterDate.Value.DayNumber;
-		var years = totalDays / 365;
+		DateOnly today = DateOnly.FromDateTime( DateTime.Now );
+		int totalDays = today.DayNumber - RegisterDate.Value.DayNumber;
+		int years = totalDays / 365;
 
-		var seniority = years switch
+		CustomerSeniorityEnum seniority = years switch
 		{
 			< 1 => CustomerSeniorityEnum.LessOneYear,
 			>= 1 and < 2 => CustomerSeniorityEnum.OneToTwoYears,

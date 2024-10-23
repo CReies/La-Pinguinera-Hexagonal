@@ -1,4 +1,4 @@
-﻿namespace LaPinguinera.Domain.Generic;
+﻿namespace LaPinguinera.Quotes.Domain.Generic;
 
 public class AggregateRoot<I>( I identity ) : Entity<I>( identity ) where I : Identity
 {

@@ -1,4 +1,4 @@
-﻿using LaPinguinera.Domain.Generic;
+﻿using LaPinguinera.Quotes.Domain.Generic;
 using LaPinguinera.Quotes.Domain.Model.Quote.Entities;
 using LaPinguinera.Quotes.Domain.Model.Quote.Events;
 using LaPinguinera.Quotes.Domain.Model.Quote.Interfaces;
@@ -14,23 +14,35 @@ public class Quote : AggregateRoot<QuoteId>
 	public List<List<AbstractBook>> RequestedBooks { get; set; }
 	public Customer? Customer { get; set; }
 	public RestBudget? RestBudget { get; set; }
+	public CreationQuoteCalculate CreationQuoteCalculate { get; set; }
+	public GroupQuoteCalculate GroupQuoteCalculate { get; set; }
+	public BudgetQuoteCalculate BudgetQuoteCalculate { get; set; }
 
 	public Quote( QuoteId id ) : base( id )
 	{
+		CreationQuoteCalculate = new();
+		GroupQuoteCalculate = new();
+		BudgetQuoteCalculate = new();
+
+		Subscribe( new QuoteBehavior( this ) );
 	}
 
 	public Quote() : base( new QuoteId() )
 	{
+		CreationQuoteCalculate = new();
+		GroupQuoteCalculate = new();
+		BudgetQuoteCalculate = new();
+
 		Subscribe( new QuoteBehavior( this ) );
 		AppendEvent( new QuoteCreated() ).Invoke();
 	}
 
 	public static Quote From( string quoteId, List<DomainEvent> events )
 	{
-		var quote = new Quote( QuoteId.Of( quoteId ) );
+		Quote quote = new( QuoteId.Of( quoteId ) );
 		events.ForEach( quote.Apply );
 
-		return new Quote();
+		return quote;
 	}
 
 	public void CalculateIndividual( string? title, string? author, decimal basePrice, BookType bookType )

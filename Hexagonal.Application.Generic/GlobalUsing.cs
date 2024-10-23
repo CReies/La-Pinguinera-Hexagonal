@@ -1,1 +1,1 @@
-﻿global using LaPinguinera.Domain.Generic;
+﻿
